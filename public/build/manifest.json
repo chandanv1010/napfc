@@ -1,6 +1,6 @@
 {
   "resources/css/app.scss": {
-    "file": "assets/app-36436de1.css",
+    "file": "assets/app-9f0beb24.css",
     "isEntry": true,
     "src": "resources/css/app.scss"
   },
@@ -15,7 +15,7 @@
     "src": "resources/js/app.backend.js"
   },
   "resources/js/app.js": {
-    "file": "assets/app-064e6f44.js",
+    "file": "assets/app-4e4cbd84.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
@@ -61,11 +61,11 @@
   },
   "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff": {
     "file": "assets/fontawesome-webfont-ba0c59de.woff",
-    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff"
+    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff"
   },
   "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff2": {
     "file": "assets/fontawesome-webfont-2adefcbc.woff2",
-    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2"
+    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff2"
   },
   "resources/vendor/backend/fonts/glyphicons-halflings-regular.eot": {
     "file": "assets/glyphicons-halflings-regular-13634da8.eot",
@@ -117,38 +117,26 @@
   },
   "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff": {
     "file": "assets/fontawesome-webfont-ba0c59de.woff",
-    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff"
+    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff"
   },
   "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2": {
     "file": "assets/fontawesome-webfont-2adefcbc.woff2",
-    "src": "resources/vendor/frontend/resources/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2"
+    "src": "resources/vendor/backend/font-awesome/fonts/fontawesome-webfont.woff2"
   },
   "resources/vendor/frontend/resources/fonts/uicons-regular-straight.woff2": {
     "file": "assets/uicons-regular-straight-e013f9ca.woff2",
     "src": "resources/vendor/frontend/resources/fonts/uicons-regular-straight.woff2"
   },
-  "resources/vendor/frontend/resources/img/footer-bg.png": {
-    "file": "assets/footer-bg-be4ab595.png",
-    "src": "resources/vendor/frontend/resources/img/footer-bg.png"
+  "resources/vendor/frontend/resources/img/project/card-bg.png": {
+    "file": "assets/card-bg-a30b5513.png",
+    "src": "resources/vendor/frontend/resources/img/project/card-bg.png"
   },
-  "resources/vendor/frontend/resources/img/ft-clock.png": {
-    "file": "assets/ft-clock-79360756.png",
-    "src": "resources/vendor/frontend/resources/img/ft-clock.png"
+  "resources/vendor/frontend/resources/img/project/footer-bg.png": {
+    "file": "assets/footer-bg-b188e775.png",
+    "src": "resources/vendor/frontend/resources/img/project/footer-bg.png"
   },
-  "resources/vendor/frontend/resources/img/ft-email.png": {
-    "file": "assets/ft-email-90172a3a.png",
-    "src": "resources/vendor/frontend/resources/img/ft-email.png"
-  },
-  "resources/vendor/frontend/resources/img/ft-location.png": {
-    "file": "assets/ft-location-832fbe8f.png",
-    "src": "resources/vendor/frontend/resources/img/ft-location.png"
-  },
-  "resources/vendor/frontend/resources/img/ft-phone.png": {
-    "file": "assets/ft-phone-4e6f3eed.png",
-    "src": "resources/vendor/frontend/resources/img/ft-phone.png"
-  },
-  "resources/vendor/frontend/resources/img/ico-call-index.png": {
-    "file": "assets/ico-call-index-142fe70a.png",
-    "src": "resources/vendor/frontend/resources/img/ico-call-index.png"
+  "resources/vendor/frontend/resources/img/project/heading-bg.png": {
+    "file": "assets/heading-bg-66239982.png",
+    "src": "resources/vendor/frontend/resources/img/project/heading-bg.png"
   }
 }
