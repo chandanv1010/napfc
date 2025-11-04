@@ -1,0 +1,147 @@
+/*School*/
+@media (min-width: 1220px) {
+  .uk-container-1440 {
+    max-width: 1440px;
+    padding: 0;
+  }
+}
+.px-2{
+    padding: 0 8px;
+}
+.gap-2{
+    gap: 8px;
+}
+.pt-3{
+    padding-top: 16px;
+}
+.w-100{
+    width: 100%;
+}
+.school-item {
+position: relative;
+transition: all 0.5s ease;
+border-radius: 10px;
+.overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 10px 10px 0 0;
+    background: rgba(131, 205, 32, 0.7);
+    color: #fff;
+    font-size: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+    transition: all 0.4s linear;
+    cursor: pointer;
+}
+.heart-icon {
+    text-align: center;
+    line-height: 25px;
+    width: 25px;
+    height: 25px;
+    background: #579800;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.rank {
+    background: #579800;
+    padding: 3px 12px;
+    border-radius: 6px;
+}
+.image {
+    height: 215px;
+    position: relative;
+    border-radius: 10px 10px 0 0;
+}
+.image img {
+    border-radius: 10px 10px 0 0;
+}
+.image .school-logo {
+    position: absolute;
+    width: 73px;
+    height: 73px;
+    right: 10px;
+    bottom: 10px;
+}
+.info {
+    box-shadow: 0 0 15px 0 #e8e8e8;
+    border-radius: 0 0 20px 20px;
+    padding-bottom: 65px;
+    position: relative;
+    .info-content {
+        padding: 15px;
+        border-bottom: 1px solid #eaeaea;
+        .title {
+            font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 0;
+            min-height: 40px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .description {
+            font-weight: 300;
+            font-size: 13px;
+            height: 60px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+    }
+    .extra-description {
+        padding: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgb(234, 234, 234);
+        p {
+            position: relative;
+            padding-left: 15px;
+            font-size: 13px;
+        }
+        p::before {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translate(0, -50%);
+            width: 4px;
+            height: 4px;
+            background: #ccc;
+            border-radius: 50%;
+        }
+    }
+    .show-more-3 {
+        position: absolute;
+        display: inline-block;
+        padding: 6px 25px;
+        background: #579800;
+        color: #fff;
+        border-radius: 0 8px 8px 0;
+        left: 0;
+        bottom: 30px;
+        transition: all 0.4s ease;
+    }
+    .project{
+        flex-wrap: wrap;
+        padding: 15px;
+        gap: 4px;
+        height: 94px;
+        overflow: hidden;
+        .text-box-default{
+            padding: 4px 12px;
+            color: #424242;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 12px;
+            height: fit-content;
+        }
+    }
+}
+}
+    
+    

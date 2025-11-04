@@ -1,0 +1,55 @@
+@use '../variables/variables';
+
+// Panel-partner
+.panel-partner {
+    // margin-bottom: 60px;
+    background: rgb(131, 205, 32, 0.08);
+    
+    .panel-head {
+        margin-bottom: 50px;
+        text-align: center;
+
+        .cl{
+            color:#FEC828;
+        }
+        
+        h3.heading-2 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            
+            > * {
+                font-size: 36px;
+            }
+        }
+        
+        .description {
+            text-align: center;
+            color: rgba(85, 85, 85, 1);
+        }
+    }
+    
+    .wrapper {
+        // background: rgba(255, 205, 41, 0.08);
+        padding: 40px 80px;
+    }
+    
+    .swiper-pagination {
+        position: relative;
+        padding-top: 25px;
+        cursor: pointer;
+        
+        &-bullet-active {
+            background: rgba(12, 74, 26, 1);
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .wrapper {
+            padding: 40px 20px;
+        }
+        
+        .panel-head h3.heading-2 {
+            font-size: 28px;
+        }
+    }
+}

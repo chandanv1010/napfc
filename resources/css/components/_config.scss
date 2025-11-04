@@ -1,0 +1,246 @@
+
+// ================
+// BASE STYLES
+// ================
+body {
+  font-family: var(--main-font), sans-serif;
+  min-height: 1000px;
+}
+
+a {
+  color: #000;
+}
+
+ul li,
+ol li {
+  list-style: none;
+}
+
+// ================
+// UTILITY / OVERRIDE
+// ================
+@media (min-width: 1220px) {
+  .uk-container {
+    max-width: 1280px;
+    padding: 0;
+  }
+}
+
+// ================
+// STARS & RATINGS
+// ================
+.review-star {
+  .fa {
+    margin-right: 3px;
+  }
+}
+
+.star-rating {
+  font-size: 15px;
+  display: inline-block;
+  position: relative;
+
+  &::before {
+    content: "★★★★★";
+    letter-spacing: 3px;
+    color: rgba(255, 205, 41, 1);
+  }
+
+  &::after {
+    content: "★★★★★";
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    color: rgba(255, 205, 41, 1);
+    width: var(--star-width);
+    letter-spacing: 3px;
+  }
+}
+
+// ================
+// BUTTONS
+// ================
+.button-style {
+  -webkit-appearance: none;
+  background: linear-gradient(90deg, #30904f 0, #80770d 50%, #30904f);
+  background-size: 500%;
+  border: none;
+  border-radius: 5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  color: #fff;
+  cursor: pointer;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  &:hover {
+    background-color: rgba(6, 77, 29, 0.8);
+    border-color: rgba(6, 77, 29, 0.8);
+    box-shadow: 0 3px 5px #00000036;
+    animation: a 2s forwards;
+  }
+}
+
+// .readmore {
+//   background-color: #064d1d;
+//   border-color: #064d1d;
+//   color: #fff;
+//   border-radius: 20px;
+//   padding: 8px 18px;
+//   font-size: 0.85em;
+//   line-height: 1.8em;
+//   text-transform: uppercase;
+//   box-shadow: 0 2px 3px #00000036;
+// }
+
+@keyframes a {
+  0% {
+    background-position: 0 50%;
+  }
+  100% {
+    background-position: 100%;
+  }
+}
+
+// ================
+// MOBILE HEADER
+// ================
+.mobile-upper {
+  padding: 20px 0;
+
+  .mobile-logo {
+    display: flex;
+    align-items: center;
+
+    a {
+      display: block;
+    //   width: 59px;
+    //   height: 59px;
+      margin-right: 10px;
+    }
+
+    .search input {
+      outline: none;
+      padding-left: 10px;
+      border-radius: 4px;
+      height: 30px;
+      width: 150px;
+      border: 1px solid #e5e7eb;
+      font-size: 12px;
+      font-family: var(--main-font), sans-serif !important;
+    }
+  }
+
+  .tool {
+    display: flex;
+  }
+}
+
+.cart-link {
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: #002d3d33;
+    border-radius: 50%;
+    line-height: 36px;
+    text-align: center;
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: rgba(9, 62, 21, 1);
+  }
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  line-height: 36px;
+
+  a {
+    width: 43px;
+    justify-content: center;
+    display: flex;
+  }
+}
+
+.mobile-menu-button svg {
+  width: 24px;
+  height: 24px;
+  fill: rgba(9, 62, 21, 1);
+}
+
+.navigation-mobile {
+  background: rgba(9, 62, 21, 1);
+  overflow-x: scroll;
+  scrollbar-width: none;
+
+  li {
+    position: relative;
+
+    a {
+      color: rgba(254, 233, 181, 1);
+      font-weight: 500;
+      padding: 8px 16px;
+      font-size: 13px;
+      text-transform: capitalize;
+    }
+
+    svg {
+      width: 25px;
+      height: 20px;
+    }
+
+    &:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      background: rgb(255, 255, 255, 0.8);
+      width: 1px;
+      height: 98%;
+      top: 1px;
+      right: 0;
+    }
+  }
+
+  ul {
+    min-width: max-content;
+  }
+}
+
+.uk-offcanvas-bar {
+  padding: 40px 0;
+  background: rgba(254, 233, 181, 1) !important;
+
+  &:after {
+    background: none;
+    box-shadow: none;
+  }
+}
+
+.uk-nav-offcanvas {
+  > li > a {
+    border-bottom: 1px dashed var(--primary-color);
+    color: #000;
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: capitalize;
+    padding: 13px 15px;
+    text-shadow: none;
+    border-top: none !important;
+    box-shadow: none !important;
+  }
+
+  border-bottom: none;
+  box-shadow: none;
+}
