@@ -8,7 +8,7 @@ use App\Http\Controllers\Frontend\Payment\VnpayController;
 use App\Http\Controllers\Frontend\Payment\PaypalController;
 use App\Http\Controllers\Frontend\ProductCatalogueController as FeProductCatalogueController;
 use App\Http\Controllers\Frontend\ContactController as FeContactController;
-use App\Http\Controllers\CrawlerController;
+// use App\Http\Controllers\CrawlerController;
 
 //@@useController@@
 
@@ -40,7 +40,7 @@ Route::group(['middleware' => ['locale']], function () {
     Route::get('tim-kiem', [FeProductCatalogueController::class, 'search'])->name('product.catalogue.search');
     Route::get('tim-kiem/trang-{page}', [FeProductCatalogueController::class, 'search'])->name('product.catalogue.search')->where('page', '[0-9]+');
 
-     Route::get('crawler', [CrawlerController::class, 'crawl'])->name('crawl.index');
+    //  Route::get('crawler', [CrawlerController::class, 'crawl'])->name('crawl.index');
 
     /** CART */
     Route::get('gio-hang'.config('apps.general.suffix'), [CartController::class, 'checkout'])->name('cart.checkout');

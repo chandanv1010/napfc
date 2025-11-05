@@ -13,19 +13,29 @@ class ThueApiController extends Controller {
     public function hook(Request $request){
 
         try {
-            $mockData = $request->merge([
-                "number" => "336883868386",
-                "phone" => "0912345678",
-                // "money" => 10000,
-                "money" => 2000,
-                "type" => "in",
-                "gateway" => "acb",
-                "txn_id" => "TXN987654",
-                // "content" => "SHOPFC7356423347",
-                "content" => "SHOPACC7641364147",
-                "datetime" => "2025-10-19 14:10:00",
-                "balance" => 123456789,
-            ]);
+            // $mockData = $request->merge([
+            //     "number" => "336883868386",
+            //     "phone" => "0912345678",
+            //     // "money" => 10000,
+            //     "money" => 2000,
+            //     "type" => "in",
+            //     "gateway" => "acb",
+            //     "txn_id" => "TXN987654",
+            //     // "content" => "SHOPFC7356423347",
+            //     "content" => "SHOPACC7641364147",
+            //     "datetime" => "2025-10-19 14:10:00",
+            //     "balance" => 123456789,
+            // ]);
+
+            $token = 'iNLBO81toIOWm5iUuAgghqVnxHGWP5blPMvMh3oL4JuPKrcEKA';
+            $thueapiToken = $request->header('X-Thueapi');
+            if ($token !== $thueapiToken) {
+
+                return response([
+                    'success' => false,
+                    'message' => 'Token missmatch !'
+                ], 401);
+            }
 
             $payload = $request->all();
             $content = strtoupper(trim($payload['content'] ?? ''));

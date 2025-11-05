@@ -43,7 +43,7 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
     Route::get('ajax/product/updateOrder', [AjaxProductController::class, 'updateOrder'])->name('ajax.updateOrder');
     Route::post('ajax/review/changeStatus', [AjaxReviewController::class,'changeStatus'])->name('ajax.review.changeStatus');
     Route::get('ajax/post/updateOrder', [AjaxPostController::class, 'updateOrder'])->name('ajax.updateOrder');
-    Route::post('ajax/excel/export', [AjaxExcelController::class, 'export'])->name('ajax.excel.export');
+    // Route::post('ajax/excel/export', [AjaxExcelController::class, 'export'])->name('ajax.excel.export');
     Route::post('ajax/sort', [HandlerController::class, 'sort'])->name('ajax.sort');
     Route::post('ajax/changeStatusField', [HandlerController::class, 'changeFieldStatus'])->name('ajax.changeFieldStatus');
     Route::get('ajax/dashboard/findModelObject', [AjaxDashboardController::class, 'findModelObject'])->name('ajax.dashboard.findModelObject');
@@ -68,9 +68,9 @@ Route::group(['middleware' => ['locale']], function () {
     Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.index');
     Route::get('ajax/post/video', [AjaxPostController::class, 'video'])->name('post.video');
     Route::post('ajax/product/wishlist', [AjaxProductController::class, 'wishlist'])->name('product.wishlist');
-    Route::get('ajax/scholar/filter', [ScholarCatalogueController::class, 'filter'])->name('scholar.filter');
-    Route::get('ajax/school/filter', [SchoolCatalogueController::class, 'filter'])->name('school.filter');
-    Route::get('ajax/admission/filter', [AdmissionCatalogueController::class, 'filter'])->name('scholar.filter');
+    // Route::get('ajax/scholar/filter', [ScholarCatalogueController::class, 'filter'])->name('scholar.filter');
+    // Route::get('ajax/school/filter', [SchoolCatalogueController::class, 'filter'])->name('school.filter');
+    // Route::get('ajax/admission/filter', [AdmissionCatalogueController::class, 'filter'])->name('scholar.filter');
 
 });
 

@@ -36,12 +36,7 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
     });
 
 
-    Route::group(['prefix' => 'introduce'], function () {
-        Route::get('index', [IntroduceController::class, 'index'])->name('introduce.index');
-        Route::post('store', [IntroduceController::class, 'store'])->name('introduce.store');
-        Route::get('{languageId}/translate', [IntroduceController::class, 'translate'])->where(['languageId' => '[0-9]+'])->name('introduce.translate');
-        Route::post('{languageId}/saveTranslate', [IntroduceController::class, 'saveTranslate'])->where(['languageId' => '[0-9]+'])->name('introduce.save.translate');
-    });
+    
 
     Route::group(['prefix' => 'review'], function () {
         Route::get('index', [ReviewController::class, 'index'])->name('review.index');
@@ -100,25 +95,6 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
         Route::delete('{id}/destroy', [ContactController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('contact.destroy');
     });
    
-    Route::group(['prefix' => 'lecturer'], function () {
-        Route::get('index', [LecturerController::class, 'index'])->name('lecturer.index');
-        Route::get('create', [LecturerController::class, 'create'])->name('lecturer.create');
-        Route::post('store', [LecturerController::class, 'store'])->name('lecturer.store');
-        Route::get('{id}/edit', [LecturerController::class, 'edit'])->where(['id' => '[0-9]+'])->name('lecturer.edit');
-        Route::post('{id}/update', [LecturerController::class, 'update'])->where(['id' => '[0-9]+'])->name('lecturer.update');
-        Route::get('{id}/delete', [LecturerController::class, 'delete'])->where(['id' => '[0-9]+'])->name('lecturer.delete');
-        Route::delete('{id}/destroy', [LecturerController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('lecturer.destroy');
-    });
-    
-    Route::group(['prefix' => 'introduce'], function () {
-        Route::get('index', [IntroduceController::class, 'index'])->name('introduce.index');
-        Route::get('create', [IntroduceController::class, 'create'])->name('introduce.create');
-        Route::post('store', [IntroduceController::class, 'store'])->name('introduce.store');
-        Route::get('{id}/edit', [IntroduceController::class, 'edit'])->where(['id' => '[0-9]+'])->name('introduce.edit');
-        Route::post('{id}/update', [IntroduceController::class, 'update'])->where(['id' => '[0-9]+'])->name('introduce.update');
-        Route::get('{id}/delete', [IntroduceController::class, 'delete'])->where(['id' => '[0-9]+'])->name('introduce.delete');
-        Route::delete('{id}/destroy', [IntroduceController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('introduce.destroy');
-    });
-
+  
 });
 
