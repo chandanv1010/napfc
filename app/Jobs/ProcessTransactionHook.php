@@ -37,9 +37,10 @@ class ProcessTransactionHook implements ShouldQueue
     public function handle(): void
     {
 
-        $contentRaw = strtoupper(trim($payload['content'] ?? ''));
+        $contentRaw = strtoupper(trim($this->payload['content'] ?? ''));
         preg_match('/SHOP(ACC|FC)[0-9]+/', $contentRaw, $matches);
         $content = $matches[0] ?? null;
+                
 
         $transactionCode = $content ?? null;
         $amount          = $this->payload['money'] ?? 0;

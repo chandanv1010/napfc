@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('transactions', function (Blueprint $table) {
             $table->unique(
-                ['customer_id', 'product_id', 'type', 'status'],
+                ['customer_id', 'product_id', 'type', 'status', 'account'],
                 'unique_customer_product_pending'
             );
         });
