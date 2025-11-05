@@ -306,6 +306,7 @@ class ProductController extends Controller
 
             $existing = Transaction::where('product_id', $productId)
                 ->where('account', $account)
+                ->where('type', 'garena')
                 ->where('status', 'pending')
                 ->first();
 
