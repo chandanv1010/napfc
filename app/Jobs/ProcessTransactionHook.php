@@ -134,7 +134,7 @@ class ProcessTransactionHook implements ShouldQueue
             $apiKey = env('PYTHON_API_KEY', 'HTVIETNAM_CHANDANV1010@GMAIL.COM');
 
             $payload = [
-                'amount' => $transaction->amount/1000,
+                'amount' => (string)($transaction->amount/1000),
                 'account' => $transaction->account,
                 'transaction_code' => $transaction->transaction_code,
             ];
