@@ -390,7 +390,7 @@
 
                         //  Polling trạng thái
                         let waited = 0;
-                        const maxWait = 600; // 10 phút (tính bằng giây)
+                        const maxWait = Infinity; // 10 phút (tính bằng giây)
 
                         checkStatus = setInterval(() => {
                             waited += 5;

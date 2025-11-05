@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Transaction;
 use App\Models\Order;
+use Illuminate\Support\Facades\Http;
 
 class ProcessTransactionHook implements ShouldQueue
 {
@@ -35,7 +36,12 @@ class ProcessTransactionHook implements ShouldQueue
      */
     public function handle(): void
     {
-        $transactionCode = $this->payload['content'] ?? null;
+
+        $contentRaw = strtoupper(trim($payload['content'] ?? ''));
+        preg_match('/SHOP(ACC|FC)[0-9]+/', $contentRaw, $matches);
+        $content = $matches[0] ?? null;
+
+        $transactionCode = $content ?? null;
         $amount          = $this->payload['money'] ?? 0;
 
         if (!$transactionCode) {
@@ -106,7 +112,7 @@ class ProcessTransactionHook implements ShouldQueue
             Log::info("🧾 Đã tạo Order #{$order->id} cho giao dịch {$transactionCode}.");
 
             // ✅ 3. Gọi Python để xử lý nạp tiền
-            // $this->callPythonRecharge($order, $transaction);
+            $this->callPythonRecharge($order, $transaction);
 
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -117,6 +123,34 @@ class ProcessTransactionHook implements ShouldQueue
 
             // Laravel Queue sẽ tự động retry nếu job thất bại
             throw $th;
+        }
+    }
+
+    protected function callPythonRecharge($order, $transaction)
+    {
+        try {
+            $url = "https://api.napfc.com/auto-tool";
+            $apiKey = env('PYTHON_API_KEY', 'HTVIETNAM_CHANDANV1010@GMAIL.COM');
+
+            $payload = [
+                'amount' => $transaction->amount/1000,
+                'account' => $transaction->account,
+                'transaction_code' => $transaction->transaction_code,
+            ];
+
+            $response = Http::withHeaders([
+                'X-API-Key' => $apiKey,
+            ])->post($url, $payload);
+
+            if ($response->successful()) {
+                Log::info("✅ Đã gửi yêu cầu nạp tiền sang Python thành công:", $response->json());
+            } else {
+                Log::error("❌ Gửi sang Python thất bại: " . $response->body());
+            }
+        } catch (\Throwable $e) {
+            Log::error("🚨 Lỗi khi gọi FastAPI: " . $e->getMessage(), [
+                'trace' => $e->getTraceAsString()
+            ]);
         }
     }
 }

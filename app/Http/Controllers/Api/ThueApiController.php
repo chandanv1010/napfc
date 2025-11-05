@@ -84,7 +84,9 @@ class ThueApiController extends Controller {
     }
 
     private function processAccountTransaction(array $payload = []){
-        $content = $payload['content'] ?? null;
+        $contentRaw = strtoupper(trim($payload['content'] ?? ''));
+        preg_match('/SHOP(ACC|FC)[0-9]+/', $contentRaw, $matches);
+        $content = $matches[0] ?? null;
         $amount  = (int)($payload['money'] ?? 0);
         if (!$content) {
             Log::warning('⚠️ Webhook account thiếu nội dung chuyển khoản.', $payload);
