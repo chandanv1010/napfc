@@ -83,37 +83,45 @@
               <div class="product-stock">
                 <div class="uk-grid uk-grid-medium uk-grid-width-large-1-2 uk-flex uk-flex-middle">
                   <div class="prd-btn btn-addtocard">
-                    @if(!$customer)
-                        {{-- Chưa đăng nhập --}}
-                        <a href="{{ route('customer.auth') }}" class="btn-login-account">
-                            <span class="title">Đăng nhập</span>
-                            <span class="sub-title">Đăng nhập để mua sản phẩm</span>
-                        </a>
-                    @elseif($paidTransaction)
-                        {{-- Đã mua rồi --}}
-                        <a href="{{ route('account.success', ['code' => $paidTransaction->transaction_code]) }}"
-                        class="btn-view-account">
-                            <span class="title">Đã mua</span>
-                            <span class="sub-title">Xem thông tin tài khoản</span>
-                        </a>
-                    @else
-                        {{-- Chưa mua --}}
-                        <a href="#"
-                        class="btn-buy-account"
-                        data-id="{{ $product->id }}">
-                            <span class="title">Mua ngay</span>
-                            <span class="sub-title">Mua ngay để nhận ưu đãi</span>
-                        </a>
-                    @endif
-                  </div>
-                  <div class="prd-btn btn-installment">
-                    <a href="tel:{{ $system['contact_hotline'] ?? '' }}"
-                       title="{{ $system['contact_hotline'] ?? '' }}">
-                      <span class="title">Liên hệ</span>
-                      <span class="sub-title">Liên hệ ngay để có giá tốt nhất</span>
-                    </a>
-                  </div>
-                </div>
+                        @if($product->status == 'sold' || $product->is_sold == 1)
+                            @if($paidTransaction && $paidTransaction->customer_id == $customer->id)
+                                {{-- Người mua chính --}}
+                                <a href="{{ route('account.success', ['code' => $paidTransaction->transaction_code]) }}"
+                                class="btn-view-account">
+                                    <span class="title">Đã mua</span>
+                                    <span class="sub-title">Xem thông tin tài khoản</span>
+                                </a>
+                            @else
+                                {{-- Người khác hoặc chưa đăng nhập --}}
+                                <div class="btn-sold-out" style="pointer-events:none; opacity:0.7;">
+                                    <span class="title" style="color:#c00; font-weight:bold;">Tài khoản đã bán</span>
+                                    <span class="sub-title" style="color:#777;">Sản phẩm này không còn khả dụng</span>
+                                </div>
+                            @endif
+                        @elseif(!$customer)
+                            {{-- Chưa đăng nhập --}}
+                            <a href="{{ route('customer.auth') }}" class="btn-login-account">
+                                <span class="title">Đăng nhập</span>
+                                <span class="sub-title">Đăng nhập để mua sản phẩm</span>
+                            </a>
+                        @elseif($paidTransaction)
+                            {{-- Đã mua (trường hợp tài khoản chưa đánh dấu sold nhưng có giao dịch) --}}
+                            <a href="{{ route('account.success', ['code' => $paidTransaction->transaction_code]) }}"
+                            class="btn-view-account">
+                                <span class="title">Đã mua</span>
+                                <span class="sub-title">Xem thông tin tài khoản</span>
+                            </a>
+                        @else
+                            {{-- Chưa mua --}}
+                            <a href="#"
+                            class="btn-buy-account"
+                            data-id="{{ $product->id }}">
+                                <span class="title">Mua ngay</span>
+                                <span class="sub-title">Mua ngay để nhận ưu đãi</span>
+                            </a>
+                        @endif
+                    </div>
+
               </div>
             </div>
 
