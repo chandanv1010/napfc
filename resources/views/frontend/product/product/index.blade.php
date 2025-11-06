@@ -71,11 +71,7 @@
             </div>
           </div>
 
-          @if (!empty($prd_description))
-            <div class="prd-description">
-              {!! $prd_description !!}
-            </div>
-          @endif
+        
 
           <div class="prd-option">
            
