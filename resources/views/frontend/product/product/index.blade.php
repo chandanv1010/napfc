@@ -121,7 +121,13 @@
                             </a>
                         @endif
                     </div>
-
+                    <div class="prd-btn btn-installment">
+                        <a href="tel:{{ $system['contact_hotline'] ?? '' }}"
+                        title="{{ $system['contact_hotline'] ?? '' }}">
+                        <span class="title">Liên hệ</span>
+                        <span class="sub-title">Liên hệ ngay để có giá tốt nhất</span>
+                        </a>
+                    </div>
               </div>
             </div>
 
