@@ -435,6 +435,7 @@
   
     HT.payCard = () => {
         $(document).off('click', '.btn-pay').on('click', '.btn-pay', function(e) {
+            alert('Chức năng sẽ sớm hoạt động...'); return false;
             let _this = $(this)
             var qrCodeModal = UIkit.modal(".qrcodeModal");
 
