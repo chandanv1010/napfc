@@ -91,7 +91,6 @@ class PostCatalogueController extends FrontendController
         $config = $this->config();
         $system = $this->system;
         $seo = seo($postCatalogue, $page);
-        $introduce = convert_array(Introduce::where('language_id', $this->language)->get(), 'keyword', 'content');
         $schema = $this->schema($postCatalogue, $posts, $breadcrumb);
         return view($template, compact(
             'config',
@@ -103,7 +102,6 @@ class PostCatalogueController extends FrontendController
             'widgets',
             'schema',
             'slides',
-            'introduce',
             'lastestNews'
         ));
     }
