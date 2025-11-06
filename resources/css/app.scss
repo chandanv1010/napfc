@@ -1203,3 +1203,12 @@
         line-height:30px;
     }
 }
+
+.pc-header{
+    .logo{
+        max-width:150px;
+        img{
+            filter: brightness(0) invert(1);
+        }
+    }
+}
