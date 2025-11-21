@@ -1,4 +1,4 @@
-<?php   
+<?php
 return [
     'module' => [
         [
@@ -30,7 +30,7 @@ return [
         [
             'title' => 'QL Sản Phẩm',
             'icon' => 'fa fa-cube',
-            'name' => ['product','attribute'],
+            'name' => ['product', 'attribute'],
             'subModule' => [
                 [
                     'title' => 'QL Nhóm Sản Phẩm',
@@ -54,11 +54,15 @@ return [
         [
             'title' => 'QL đơn hàng',
             'icon' => 'fa fa-shopping-bag',
-            'name' => ['order'],
+            'name' => ['order', 'transaction'],
             'subModule' => [
                 [
                     'title' => 'QL Đơn Hàng',
                     'route' => 'order/index'
+                ],
+                [
+                    'title' => 'QL Giao Dịch',
+                    'route' => 'transaction/index'
                 ],
             ]
         ],
@@ -136,7 +140,7 @@ return [
         [
             'title' => 'QL Nhóm Thành Viên',
             'icon' => 'fa fa-user',
-            'name' => ['user','permission'],
+            'name' => ['user', 'permission'],
             'subModule' => [
                 [
                     'title' => 'QL Nhóm Thành Viên',
@@ -191,7 +195,7 @@ return [
                     'title' => 'Quản lý Widget',
                     'route' => 'widget/index'
                 ],
-                
+
             ]
         ]
     ],

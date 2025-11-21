@@ -28,6 +28,12 @@ return [
             'title' => 'Quản lý thông tin chi tiết đơn hàng',
         ],
     ],
+    'transaction' => [
+        'index' => [
+            'title' => 'Quản lý giao dịch',
+            'table' => 'Danh sách giao dịch',
+        ],
+    ],
     'distribution' => [
         'index' => [
             'title' => 'Quản lý Hệ thống phân phối',

@@ -27,11 +27,13 @@ class Transaction extends Model
         'quantity'
     ];
 
-    public function products(): BelongsTo{
-        return $this->belongsTo(Product::class);
+    public function products(): BelongsTo
+    {
+        return $this->belongsTo(Product::class)->withTrashed();
     }
 
-    public function customers(): BelongsTo {
-        return $this->belongsTo(Customer::class);
+    public function customers(): BelongsTo
+    {
+        return $this->belongsTo(Customer::class, 'customer_id')->withTrashed();
     }
 }

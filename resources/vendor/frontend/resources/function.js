@@ -1,7 +1,7 @@
 // const UIkit = require("uikit");
 
-(function($) {
-    
+(function ($) {
+
     "use strict";
     var HT = {}; // Khai báo là 1 đối tượng
     var timer;
@@ -11,22 +11,22 @@
     HT.swiperOption = (setting) => {
         // console.log(setting);
         let option = {}
-        if(setting.animation.length){
+        if (setting.animation.length) {
             option.effect = setting.animation;
-        }	
-        if(setting.arrow === 'accept'){
+        }
+        if (setting.arrow === 'accept') {
             option.navigation = {
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             }
         }
-        if(setting.autoplay === 'accept'){
+        if (setting.autoplay === 'accept') {
             option.autoplay = {
                 delay: 50000,
                 disableOnInteraction: false,
             }
         }
-        if(setting.navigate === 'dots'){
+        if (setting.navigate === 'dots') {
             option.pagination = {
                 el: '.swiper-pagination',
             }
@@ -42,7 +42,7 @@
                 el: '.swiper-pagination',
             },
             autoplay: {
-                delay : 3000,
+                delay: 3000,
             },
             spaceBetween: 15,
             slidesPerView: 1.5,
@@ -64,14 +64,14 @@
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
-            
+
         });
     }
 
     HT.major = () => {
 
         console.log($('.homepage-news').length);
-        
+
 
         var swiper = new Swiper(".homepage-news .swiper-container", {
             loop: false,
@@ -79,7 +79,7 @@
                 el: '.swiper-pagination',
             },
             autoplay: {
-                delay : 2000,
+                delay: 2000,
             },
             spaceBetween: 15,
             slidesPerView: 1.5,
@@ -101,37 +101,37 @@
                 nextEl: '.swiper-button-next',
                 prevEl: '.swiper-button-prev',
             },
-            
+
         });
 
         console.log(swiper);
-        
-        
+
+
     }
 
 
 
     HT.niceSelect = () => {
-        if($('.nice-select').length){
+        if ($('.nice-select').length) {
             $('.nice-select').niceSelect();
         }
-        
+
     }
 
     HT.select2 = () => {
-        if($('.setupSelect2').length){
+        if ($('.setupSelect2').length) {
             $('.setupSelect2').select2();
         }
-        
+
     }
 
 
     HT.skeleton = () => {
-        
-        document.addEventListener("DOMContentLoaded", function() {
+
+        document.addEventListener("DOMContentLoaded", function () {
             // Lựa chọn tất cả các ảnh cần lazy load
             const lazyImages = document.querySelectorAll('.lazy-image');
-            
+
             // Tạo Intersection Observer
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -140,14 +140,14 @@
                         const img = entry.target;
                         // Lấy nguồn ảnh từ thuộc tính data-src
                         const src = img.dataset.src;
-                        
+
                         // Tạo ảnh mới và thiết lập trình xử lý sự kiện onload
                         const newImg = new Image();
-                        newImg.onload = function() {
+                        newImg.onload = function () {
                             // Khi ảnh đã tải xong, gán src và thêm class loaded
                             img.src = src;
                             img.classList.add('loaded');
-                            
+
                             // Ẩn skeleton loading
                             const parent = img.closest('.image');
                             if (parent) {
@@ -156,11 +156,11 @@
                                     skeleton.style.display = 'none';
                                 }
                             }
-                            
+
                             // Ngừng quan sát phần tử này
                             observer.unobserve(img);
                         };
-                        
+
                         // Bắt đầu tải ảnh
                         newImg.src = src;
                     }
@@ -170,7 +170,7 @@
                 rootMargin: '0px 0px 50px 0px', // Tải trước ảnh khi chúng cách 50px từ viewport
                 threshold: 0.1 // Kích hoạt khi ít nhất 10% của ảnh trở nên visible
             });
-            
+
             // Quan sát mỗi ảnh
             lazyImages.forEach(img => {
                 observer.observe(img);
@@ -180,7 +180,7 @@
 
 
     HT.removePagination = () => {
-        $('.filter-content').on('slide', function() {
+        $('.filter-content').on('slide', function () {
             $('.uk-flex .pagination').hide();
         });
     };
@@ -188,69 +188,69 @@
 
     HT.wrapTable = () => {
         var width = $(window).width()
-        if(width < 600){
+        if (width < 600) {
             $('table').wrap('<div class="uk-overflow-container"></div>')
         }
     }
 
 
     HT.advise = () => {
-        $(document).on('click','.suggest-aj button', function(e){
+        $(document).on('click', '.suggest-aj button', function (e) {
             e.preventDefault()
             let _this = $(this)
-            let option  = {
-                name : $('#suggest input[name=name]').val(),
-                gender : $('#suggest input[name=gender]').val(),
-                phone : $('#suggest input[name=phone]').val(),
+            let option = {
+                name: $('#suggest input[name=name]').val(),
+                gender: $('#suggest input[name=gender]').val(),
+                phone: $('#suggest input[name=phone]').val(),
                 address: $('#suggest input[name=address]').val(),
-                post_id : $('#suggest input[name=post_id ]').val(),
-                product_id : $('#suggest input[name=product_id ]').val(),
+                post_id: $('#suggest input[name=post_id ]').val(),
+                product_id: $('#suggest input[name=product_id ]').val(),
                 _token: _token,
             }
             toastr.success('Gửi yêu cầu thành công , chúng tôi sẽ sớm liên hệ vs bạn !', 'Thông báo từ hệ thống')
             $.ajax({
-                url: 'ajax/contact/advise', 
-                type: 'POST', 
-                data: option, 
-                dataType: 'json', 
-                beforeSend: function() {
-                    
+                url: 'ajax/contact/advise',
+                type: 'POST',
+                data: option,
+                dataType: 'json',
+                beforeSend: function () {
+
                 },
-                success: function(res) {
+                success: function (res) {
                     console.log(res)
-                    if(res.code === 10){
-                        
-                        setTimeout(function(){
+                    if (res.code === 10) {
+
+                        setTimeout(function () {
                             location.reload();
                         }, 1000);
-                    }else if(res.status === 422){
+                    } else if (res.status === 422) {
                         let errors = res.messages;
-                        for(let field in errors){
+                        for (let field in errors) {
                             let errorMessage = errors[field];
-                            $('.'+ field + '-error').text(errorMessage);
+                            $('.' + field + '-error').text(errorMessage);
                         }
                     }
                 },
             });
-            
+
         })
     }
 
     HT.highlightTocOnScroll = () => {
-        $(window).on('scroll', function() {
+        $(window).on('scroll', function () {
             let scrollTop = $(window).scrollTop();
-            
-            $('.widget-toc a').each(function() {
+
+            $('.widget-toc a').each(function () {
                 let href = $(this).attr('href');
                 if (href && href.startsWith('#')) {
                     let targetId = href.substring(1);
                     let targetElement = document.getElementById(targetId); // Sử dụng getElementById
-                    
+
                     if (targetElement) {
                         let $targetElement = $(targetElement);
                         let elementTop = $targetElement.offset().top - 150;
                         let elementBottom = elementTop + $targetElement.outerHeight();
-                        
+
                         if (scrollTop >= elementTop && scrollTop < elementBottom) {
                             $('.widget-toc a').removeClass('active');
                             $(this).addClass('active');
@@ -262,7 +262,7 @@
     }
 
     HT.changeCardQuantity = () => {
-        $(document).on('change', '#card-quantity', function(){
+        $(document).on('change', '#card-quantity', function () {
             const textQuantity = $('#text-quantity')
             const quantity = $(this).val()
             textQuantity.html(quantity)
@@ -311,11 +311,11 @@
             `;
 
             html += `
-                <a href="#" 
+                <a href="#"
                     id="do-card"
-                    class="buy-or-login btn-pay" 
-                    data-id="${card.id}" 
-                    data-price="${price}" 
+                    class="buy-or-login btn-pay"
+                    data-id="${card.id}"
+                    data-price="${price}"
                     data-quantity="1"
                     data-name="${name}">
                         <div class="main-text">Thanh toán ngay</div>
@@ -332,10 +332,10 @@
             //     `;
             // } else {
             //     html += `
-            //         <a href="#" 
-            //             class="buy-or-login btn-pay" 
-            //             data-id="${card.id}" 
-            //             data-price="${price}" 
+            //         <a href="#"
+            //             class="buy-or-login btn-pay"
+            //             data-id="${card.id}"
+            //             data-price="${price}"
             //             data-name="${name}">
             //                 <div class="main-text">Thanh toán ngay</div>
             //                 <div class="sub-text">Thanh toán số tiền ${formattedPrice}</div>
@@ -429,9 +429,27 @@
                                     if (resp.status === 'paid') {
                                         clearInterval(checkStatus);
                                         checkStatus = null;
+
+                                        // Tắt modal QR code
                                         modal.hide();
+
+                                        // Hiển thị thông tin tài khoản trong modal (chỉ mở 1 lần cho mỗi transaction)
+                                        if (resp.account_info) {
+                                            const transactionCode = data.transaction_code;
+                                            const shownKey = 'accountInfoShown_' + transactionCode;
+
+                                            // Kiểm tra xem đã mở modal cho transaction này chưa
+                                            if (!sessionStorage.getItem(shownKey)) {
+                                                $('#account_info_text').text(resp.account_info);
+                                                const accountModal = UIkit.modal('.accountInfoModal');
+                                                accountModal.show();
+
+                                                // Đánh dấu đã mở modal cho transaction này
+                                                sessionStorage.setItem(shownKey, 'true');
+                                            }
+                                        }
+
                                         toastr.success('Thanh toán thành công!');
-                                        window.location.href = `/account/info/success/${data.transaction_code}`;
                                     } else if (resp.status === 'expired' || resp.status === 'invalid') {
                                         clearInterval(checkStatus);
                                         checkStatus = null;
@@ -456,9 +474,9 @@
         });
     };
 
-  
+
     HT.payCard = () => {
-        $(document).off('click', '.btn-pay').on('click', '.btn-pay', function(e) {
+        $(document).off('click', '.btn-pay').on('click', '.btn-pay', function (e) {
             // alert('Chức năng sẽ sớm hoạt động...'); return false;
             let _this = $(this)
             var qrCodeModal = UIkit.modal(".qrcodeModal");
@@ -477,7 +495,7 @@
                 return;
             }
 
-            let option  = {
+            let option = {
                 id,
                 _token,
                 account,
@@ -485,19 +503,19 @@
                 customerId,
                 quantity
             }
-            
+
 
             // toastr.success('Gửi yêu cầu thành công , chúng tôi sẽ sớm liên hệ vs bạn !', 'Thông báo từ hệ thống')
             $.ajax({
-                url: 'ajax/transaction/create', 
-                type: 'POST', 
-                data: option, 
-                dataType: 'json', 
-                beforeSend: function() {
+                url: 'ajax/transaction/create',
+                type: 'POST',
+                data: option,
+                dataType: 'json',
+                beforeSend: function () {
                     $('#qr_image').attr('src', '')
                     _this.prop('disabled', true).html('<div><div style="color:#fff;font-size:16px;text-transform:uppercase;font-weight:bold">Đang tạo giao dịch...</div><div style="color:#fff;">Vui lòng chờ trong giây lát</div></div>')
                 },
-                success: function(res) {
+                success: function (res) {
                     // _this.remove()
                     if (!res.success) {
                         toastr.error(res.data?.message || 'Không thể khởi tạo giao dịch', 'Lỗi')
@@ -532,9 +550,9 @@
                         const qrModal = UIkit.modal('.qrcodeModal')
                         qrModal.show()
                     })
-                    
+
                 },
-                complete: function() {
+                complete: function () {
                     _this.prop('disabled', false).html(oldButton)
                 }
             });
@@ -556,7 +574,7 @@
                     const res = r.value
                     if (res?.success && res.data?.status === 'pending') {
                         next.push(pending[i])
-                    }else if(res.success && res.data?.status === 'success'){
+                    } else if (res.success && res.data?.status === 'success') {
                         console.log('Polling Success, Close QR Popup');
                         qrModal.hide();
                     }
@@ -564,18 +582,18 @@
                 localStorage.setItem('pending_transactions', JSON.stringify(next))
             })
 
-            
+
 
         }, 5000)
     }
-    
-    
-    
-    $(document).ready(function(){
+
+
+
+    $(document).ready(function () {
         HT.highlightTocOnScroll();
         /* CORE JS */
         HT.swiper()
-        HT.niceSelect()		
+        HT.niceSelect()
         HT.select2()
         HT.wrapTable()
         HT.skeleton()
@@ -588,16 +606,18 @@
         HT.buyAccount()
         HT.pollingTransactionCheck()
 
-       
 
-        $(document).on('hidden.uk.modal', '.qrcodeModal', function() {
-        if (checkStatus) {
-            clearInterval(checkStatus);
-            checkStatus = null;
-            lastStatus = null;
-            console.log('🛑 Modal đóng → dừng polling');
-        }
-    });
+
+        $(document).on('hidden.uk.modal', '.qrcodeModal', function () {
+            if (checkStatus) {
+                clearInterval(checkStatus);
+                checkStatus = null;
+                lastStatus = null;
+                console.log('🛑 Modal đóng → dừng polling');
+            }
+        });
+
+        // Không cần reset flag vì đã dùng sessionStorage với transaction_code
 
 
     });
