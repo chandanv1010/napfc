@@ -16,9 +16,13 @@
                 <div class="uk-container uk-container-center">
                     <div class="page-heading">Nạp thẻ</div>
                     <div class="description">Chọn mệnh giá thẻ</div>
+                    
                     <div class="card-wrapper">
                         <div class="uk-grid uk-grid-medium">
                             <div class="uk-width-small-1-2 uk-width-large-2-3">
+                                <div class="quantity">
+                                    <input type="number" id="card-quantity" value="1" class="form-control input-text">
+                                </div>
                                 <div class="card-list">
                                     <div class="uk-grid uk-grid-medium">
                                         

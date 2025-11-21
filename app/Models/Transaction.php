@@ -23,7 +23,8 @@ class Transaction extends Model
         'type',
         'gateway',
         'description',
-        'paid_at'
+        'paid_at',
+        'quantity'
     ];
 
     public function products(): BelongsTo{

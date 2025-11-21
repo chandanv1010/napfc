@@ -293,7 +293,10 @@ class ProductController extends Controller
             $account = $request->input('account');
             $productId = $request->input('id');
             $amount = $request->input('amount');
-            $customerId = $request->input('customerId');
+            // $customerId = $request->input('customerId');
+            $quantity = $request->input('quantity') ?? 1;
+
+
             if (!$account || !$productId || !$amount) {
                 return response()->json([
                     'success' => false,
@@ -304,17 +307,31 @@ class ProductController extends Controller
                 ]);
             }
 
+            /**
+             * Kiểm tra xem đã có transaction liên quan đến account đang muốn nạp hay là chưa??
+             * --> Giả sử: lần đầu chọn 10k -> quantity = 1 --> tạo ra transaction_code = abc
+             * --> nhưng ko chuyển khoản mà bấm chọn sang quantity = 2 --> lúc này gửi lên thì amount có rồi = 10k quantity thay = 2
+             * --> status tất nhiên vẫn pending 
+             * 
+             * 
+             */
             $existing = Transaction::where('product_id', $productId)
                 ->where('account', $account)
                 ->where('type', 'garena')
                 ->where('status', 'pending')
                 ->first();
 
+
             $bankBin       = '970416';
             $accountNumber = '336883868386';
             $accountName   = 'Bui Phuong Dai';
 
             if ($existing) {
+
+                $existing->update([
+                    'quantity' => $quantity
+                ]);
+
                 $transactionCode = $existing->transaction_code;
             } else {
                 // Nếu chưa tồn tại → tạo giao dịch mới
@@ -325,7 +342,7 @@ class ProductController extends Controller
                     'product_id'       => $productId,
                     'account'          => $account,
                     'amount'           => $amount,
-                    'customer_id'      => $customerId,
+                    // 'customer_id'      => $customerId,
                     'status'           => 'pending',
                     'type'             => 'garena',
                 ]);
@@ -335,7 +352,7 @@ class ProductController extends Controller
                 'https://img.vietqr.io/image/%s-%s-print.png?amount=%d&addInfo=%s&accountName=%s',
                 $bankBin,
                 $accountNumber,
-                $existing->amount,
+                $existing->amount * $existing->quantity,
                 $transactionCode,
                 urlencode($accountName)
             );

@@ -43,7 +43,7 @@ class ProcessTransactionHook implements ShouldQueue
                 
 
         $transactionCode = $content ?? null;
-        $amount          = $this->payload['money'] ?? 0;
+        // $amount          = $this->payload['money'] ?? 0;
 
         if (!$transactionCode) {
             Log::warning('⚠️ Thiếu transaction_code trong payload.', $this->payload);
@@ -57,6 +57,10 @@ class ProcessTransactionHook implements ShouldQueue
             $transaction = Transaction::where('transaction_code', $transactionCode)
                 ->lockForUpdate()
                 ->first();
+
+            Log::info('Transaction: ', [$transaction]);
+
+            // die();
 
             if (!$transaction) {
                 Log::warning("❌ Không tìm thấy transaction: {$transactionCode}");
@@ -78,42 +82,14 @@ class ProcessTransactionHook implements ShouldQueue
                 'description'    => 'Webhook xác nhận đã nhận tiền',
             ]);
 
-            // ✅ 2. Tạo Order (nếu chưa có)
-            $order = Order::firstOrCreate(
-                ['transaction_id' => $transaction->id],
-                [
-                    'account'     => $transaction->account,
-                    'amount'      => $transaction->amount,
-                    'confirm'      => 'processing',
-                    'type'        => $transaction->type,
-                    'customer_id' => $transaction->customer_id,
-                ]
-            );
-
-            Log::info('Order: ', $order->toArray());
             Log::info('Transaction: ', $transaction->toArray());
 
-            // die();
-
-            if ($order->id) {
-                $order->products()->attach($transaction->product_id, [
-                    'uuid'          => (string) \Illuminate\Support\Str::uuid(),
-                    'name'          => $transaction->type ?? 'Nạp tiền',
-                    'qty'           => 1,
-                    'price'         => $transaction->amount,
-                    'priceOriginal' => $transaction->amount,
-                    'option'        => json_encode([]),
-                ]);
-
-                Log::info("🧩 Đã thêm product #{$transaction->product_id} vào order #{$order->id}");
-            }
-
+          
             DB::commit();
 
-            Log::info("🧾 Đã tạo Order #{$order->id} cho giao dịch {$transactionCode}.");
 
             // ✅ 3. Gọi Python để xử lý nạp tiền
-            $this->callPythonRecharge($order, $transaction);
+            $this->callPythonRecharge($transaction);
 
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -127,17 +103,20 @@ class ProcessTransactionHook implements ShouldQueue
         }
     }
 
-    protected function callPythonRecharge($order, $transaction)
+    protected function callPythonRecharge($transaction)
     {
         try {
-            $url = "https://api.napfc.com/auto-tool";
+            // $url = "https://api.napfc.com/auto-tool";
+            $url = "http://127.0.0.1:8001/auto-tool";
             $apiKey = env('PYTHON_API_KEY', 'HTVIETNAM_CHANDANV1010@GMAIL.COM');
 
             $payload = [
                 'amount' => (string)($transaction->amount/1000),
                 'account' => $transaction->account,
                 'transaction_code' => $transaction->transaction_code,
+                'quantity' => $transaction->quantity
             ];
+
 
             $response = Http::withHeaders([
                 'X-API-Key' => $apiKey,

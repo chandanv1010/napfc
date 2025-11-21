@@ -261,6 +261,15 @@
         });
     }
 
+    HT.changeCardQuantity = () => {
+        $(document).on('change', '#card-quantity', function(){
+            const textQuantity = $('#text-quantity')
+            const quantity = $(this).val()
+            textQuantity.html(quantity)
+            $('#do-card').attr('data-quantity', quantity)
+        })
+    }
+
     HT.chooseGarenaCard = () => {
         $(document).on('click', '.garena-item', function () {
             const _this = $(this);
@@ -272,6 +281,8 @@
             // Kiểm tra trạng thái đăng nhập (Laravel render sẵn)
             const isLoggedIn = window.isCustomerLoggedIn || false;
             const loginUrl = window.loginUrl || '/dang-nhap.html';
+            const $quantity = $('#card-quantity')
+            $quantity.val(1)
 
             // Chuẩn bị nội dung HTML đè vào .card-description
             let html = `
@@ -288,7 +299,7 @@
                         </div>
                         <div class="label">
                             <span class="text">Số lượng:</span>
-                            <span class="value">1</span>
+                            <span class="value" id="text-quantity">${$quantity.val()}</span>
                         </div>
                         <div class="label">
                             <span class="text">Tổng tiền:</span>
@@ -299,30 +310,43 @@
                         </div>
             `;
 
-            if (!isLoggedIn) {
-                html += `
-                    <button class="buy-or-login" onclick="window.location.href='${loginUrl}'">
-                        <div class="main-text">Đăng nhập ngay</div>
-                        <div class="sub-text">Vui lòng đăng nhập để tiếp tục</div>
-                    </button>
-                `;
-            } else {
-                html += `
-                    <a href="#" 
-                        class="buy-or-login btn-pay" 
-                        data-id="${card.id}" 
-                        data-price="${price}" 
-                        data-name="${name}">
-                            <div class="main-text">Thanh toán ngay</div>
-                            <div class="sub-text">Thanh toán số tiền ${formattedPrice}</div>
-                    </a>
-                `;
-            }
+            html += `
+                <a href="#" 
+                    id="do-card"
+                    class="buy-or-login btn-pay" 
+                    data-id="${card.id}" 
+                    data-price="${price}" 
+                    data-quantity="1"
+                    data-name="${name}">
+                        <div class="main-text">Thanh toán ngay</div>
+                        <div class="sub-text">Thanh toán số tiền ${formattedPrice}</div>
+                </a>
+            `;
+
+            // if (!isLoggedIn) {
+            //     html += `
+            //         <button class="buy-or-login" onclick="window.location.href='${loginUrl}'">
+            //             <div class="main-text">Đăng nhập ngay</div>
+            //             <div class="sub-text">Vui lòng đăng nhập để tiếp tục</div>
+            //         </button>
+            //     `;
+            // } else {
+            //     html += `
+            //         <a href="#" 
+            //             class="buy-or-login btn-pay" 
+            //             data-id="${card.id}" 
+            //             data-price="${price}" 
+            //             data-name="${name}">
+            //                 <div class="main-text">Thanh toán ngay</div>
+            //                 <div class="sub-text">Thanh toán số tiền ${formattedPrice}</div>
+            //         </a>
+            //     `;
+            // }
 
             html += `
                         <div class="notice">
                             Nếu bạn muốn nạp số dư nhiều hơn để sử dụng cho những lần mua hàng tiếp theo,
-                            vui lòng truy cập trang Nạp số dư <a href="/nap-so-du">tại đây</a>.
+                            vui lòng liên hệ Hotline.
                         </div>
                     </div>
                 </div>
@@ -444,6 +468,7 @@
             const id = _this.attr('data-id')
             const amount = parseFloat(_this.attr('data-price'))
             const account = $('#account-input').val()?.trim().toLowerCase()
+            const quantity = _this.attr('data-quantity')
             const timestamp = Date.now()
             const customerId = window.customerId
 
@@ -457,8 +482,11 @@
                 _token,
                 account,
                 amount,
-                customerId
+                customerId,
+                quantity
             }
+            
+
             // toastr.success('Gửi yêu cầu thành công , chúng tôi sẽ sớm liên hệ vs bạn !', 'Thông báo từ hệ thống')
             $.ajax({
                 url: 'ajax/transaction/create', 
@@ -518,6 +546,7 @@
         setInterval(() => {
             let pending = JSON.parse(localStorage.getItem('pending_transactions') || '[]')
             if (!pending.length) return
+            const qrModal = UIkit.modal('.qrcodeModal')
 
             const next = []
             const requests = pending.map(tx => $.get('ajax/transaction/status', { code: tx.transaction_code }))
@@ -527,10 +556,16 @@
                     const res = r.value
                     if (res?.success && res.data?.status === 'pending') {
                         next.push(pending[i])
+                    }else if(res.success && res.data?.status === 'success'){
+                        console.log('Polling Success, Close QR Popup');
+                        qrModal.hide();
                     }
                 })
                 localStorage.setItem('pending_transactions', JSON.stringify(next))
             })
+
+            
+
         }, 5000)
     }
     
@@ -544,6 +579,8 @@
         HT.select2()
         HT.wrapTable()
         HT.skeleton()
+
+        HT.changeCardQuantity()
 
         /** ACTION  */
         HT.chooseGarenaCard()
