@@ -1,51 +1,48 @@
-<?php  
+<?php
+
 namespace App\Http\Controllers\Api;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessTransactionHook;
 use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
+use App\Models\Product;
 
 
-class ThueApiController extends Controller {
+class ThueApiController extends Controller
+{
 
-    public function hook(Request $request){
-
+    public function hook(Request $request)
+    {
         try {
-            $mockData = $request->merge([
-                "number" => "336883868386",
-                "phone" => "0912345678",
-                // "money" => 10000,
-                "money" => 100000,
-                "type" => "in",
-                "gateway" => "acb",
-                "txn_id" => "TXN987654",
-                // "content" => "SHOPFC7356423347",
-                "content" => "SHOPFC4094865651",
-                "datetime" => "2025-10-19 14:10:00",
-                "balance" => 123456789,
-            ]);
+            $content = strtoupper(trim($request->input('content', '')));
+            $money = $request->has('money') ? (int)$request->input('money') : null;
 
+            if (empty($content)) {
+                $content = "SHOPFC1234567890";
+            }
+            if ($money === null) {
+                $money = 100000;
+            }
 
-            // $token = 'iNLBO81toIOWm5iUuAgghqVnxHGWP5blPMvMh3oL4JuPKrcEKA';
-            // $thueapiToken = $request->header('X-Thueapi');
-            // if ($token !== $thueapiToken) {
+            $payload = [
+                "number" => $request->input('number', "336883868386"),
+                "phone" => $request->input('phone', "0912345678"),
+                "money" => $money,
+                "type" => $request->input('type', "in"),
+                "gateway" => $request->input('gateway', "acb"),
+                "txn_id" => $request->input('txn_id', "TXN987654"),
+                "content" => $content,
+                "datetime" => $request->input('datetime', "2025-10-19 14:10:00"),
+                "balance" => $request->input('balance', 123456789),
+            ];
 
-            //     return response([
-            //         'success' => false,
-            //         'message' => 'Token missmatch !'
-            //     ], 401);
-            // }
-
-            $payload = $request->all();
             $content = strtoupper(trim($payload['content'] ?? ''));
             if (!$content) {
-                Log::warning('⚠️ Webhook không có content, bỏ qua.');
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Thiếu nội dung content trong webhook.'
-                ]);
+                Log::warning('⚠️ Webhook không có content, bỏ qua.', ['payload' => $payload]);
+                return response()->noContent();
             }
 
             if (str_starts_with($content, 'SHOPFC')) {
@@ -57,41 +54,44 @@ class ThueApiController extends Controller {
             } elseif (str_starts_with($content, 'SHOPACC')) {
                 Log::info("📩 Webhook [SHOPACC] nhận được giao dịch mua account", ['payload' => $payload]);
 
-                $this->processAccountTransaction($payload);
+                $processed = $this->processAccountTransaction($payload);
 
-                Log::info("🎉 Đã xử lý xong giao dịch mua account", [
-                    'transaction_code' => $content,
-                ]);
+                if ($processed) {
+                    Log::info("🎉 Đã xử lý xong giao dịch mua account", [
+                        'transaction_code' => $content,
+                    ]);
+                } else {
+                    Log::warning('⚠️ Không tìm thấy giao dịch hoặc giao dịch đã được xử lý trước đó.', [
+                        'transaction_code' => $content,
+                        'payload' => $payload
+                    ]);
+                }
             } else {
-                Log::warning('⚠️ Nội dung chuyển khoản không hợp lệ hoặc không khớp định dạng:', ['content' => $content]);
+                Log::warning('⚠️ Nội dung chuyển khoản không hợp lệ hoặc không khớp định dạng:', [
+                    'content' => $content,
+                    'payload' => $payload
+                ]);
             }
 
-
-           
-        
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Webhook đã được nhận, Đã thêm vào hàng đợi.',
-                'data' => $payload
-            ]);
+            return response()->noContent();
         } catch (\Throwable $th) {
-            Log::error('❌ Lỗi khi nhận webhook: '.$th->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi xử lý webhook.'
-            ], 500);
+            Log::error('❌ Lỗi khi nhận webhook: ' . $th->getMessage(), [
+                'trace' => $th->getTraceAsString(),
+                'payload' => $request->all()
+            ]);
+            return response()->noContent();
         }
     }
 
-    private function processAccountTransaction(array $payload = []){
+    private function processAccountTransaction(array $payload = []): bool
+    {
         $contentRaw = strtoupper(trim($payload['content'] ?? ''));
         preg_match('/SHOP(ACC|FC)[0-9]+/', $contentRaw, $matches);
         $content = $matches[0] ?? null;
         $amount  = (int)($payload['money'] ?? 0);
         if (!$content) {
             Log::warning('⚠️ Webhook account thiếu nội dung chuyển khoản.', $payload);
-            return;
+            return false;
         }
         try {
             DB::beginTransaction();
@@ -101,19 +101,18 @@ class ThueApiController extends Controller {
                 ->where('type', 'account')
                 ->lockForUpdate()
                 ->first();
-            
 
             if (!$transaction) {
                 Log::warning("❌ Không tìm thấy transaction cho mã: {$content}");
                 DB::rollBack();
-                return;
+                return false;
             }
 
             // 🟡 Nếu giao dịch đã xử lý rồi thì bỏ qua
             if ($transaction->status === 'paid') {
                 Log::info("⚠️ Transaction {$content} đã được thanh toán trước đó.");
                 DB::rollBack();
-                return;
+                return false;
             }
 
             // ✅ Kiểm tra số tiền khớp
@@ -127,7 +126,7 @@ class ThueApiController extends Controller {
                     'description' => 'Sai số tiền khi mua account.',
                 ]);
                 DB::commit();
-                return;
+                return false;
             }
 
             // ✅ Cập nhật trạng thái giao dịch
@@ -137,47 +136,25 @@ class ThueApiController extends Controller {
                 'description' => 'Webhook xác nhận mua account thành công.',
             ]);
 
-            // ✅ Tạo Order mới
-            $order = \App\Models\Order::firstOrCreate(
-                ['transaction_id' => $transaction->id],
-                [
-                    'amount' => $transaction->amount,
-                    'confirm' => 'processing',
-                    'type' => $transaction->type,
-                    'customer_id' => $transaction->customer_id,
-                ]
-            );
-
-            // ✅ Gắn product vào order
-            $order->products()->syncWithoutDetaching([
-                $transaction->product_id => [
-                    'uuid' => (string) \Illuminate\Support\Str::uuid(),
-                    'name' => $transaction->type ?? 'Mua account',
-                    'qty' => 1,
-                    'price' => $transaction->amount,
-                    'priceOriginal' => $transaction->amount,
-                    'option' => json_encode([]),
-                ],
-            ]);
-
-            Log::info("🧾 Đã tạo order #{$order->id} cho giao dịch {$transaction->transaction_code}");
-
-        
+            // ✅ Cập nhật publish của sản phẩm từ 2 về 1 để không hiển thị nữa
+            if ($transaction->product_id) {
+                $product = Product::find($transaction->product_id);
+                if ($product && $product->publish == 2) {
+                    $product->update(['publish' => 1]);
+                    Log::info("🔒 Đã cập nhật publish sản phẩm #{$product->id} từ 2 về 1");
+                }
+            }
 
             DB::commit();
             Log::info("🎉 Giao dịch mua account hoàn tất #{$transaction->transaction_code}");
-
+            return true;
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error("❌ Lỗi xử lý processAccountTransaction: " . $th->getMessage(), [
                 'trace' => $th->getTraceAsString(),
                 'payload' => $payload
             ]);
+            return false;
         }
-
     }
-
-    
-
-
 }

@@ -1,4 +1,5 @@
-<?php  
+<?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\V1\Promotion\PromotionController;
 use App\Http\Controllers\Backend\V1\Product\ProductCatalogueController;
@@ -6,11 +7,12 @@ use App\Http\Controllers\Backend\V1\Product\ProductController;
 use App\Http\Controllers\Backend\V1\Attribute\AttributeCatalogueController;
 use App\Http\Controllers\Backend\V1\Attribute\AttributeController;
 use App\Http\Controllers\Backend\V1\OrderController;
+use App\Http\Controllers\Backend\V1\TransactionController;
 use App\Http\Controllers\Backend\V1\VoucherController;
 
 
-Route::group(['middleware' => ['admin','locale','backend_default_locale']], function () {
-    
+Route::group(['middleware' => ['admin', 'locale', 'backend_default_locale']], function () {
+
     Route::group(['prefix' => 'promotion'], function () {
         Route::get('index', [PromotionController::class, 'index'])->name('promotion.index');
         Route::get('create', [PromotionController::class, 'create'])->name('promotion.create');
@@ -64,6 +66,10 @@ Route::group(['middleware' => ['admin','locale','backend_default_locale']], func
     Route::group(['prefix' => 'order'], function () {
         Route::get('index', [OrderController::class, 'index'])->name('order.index');
         Route::get('{id}/detail', [OrderController::class, 'detail'])->where(['id' => '[0-9]+'])->name('order.detail');
+    });
+
+    Route::group(['prefix' => 'transaction'], function () {
+        Route::get('index', [TransactionController::class, 'index'])->name('transaction.index');
     });
 
     Route::group(['prefix' => 'voucher'], function () {

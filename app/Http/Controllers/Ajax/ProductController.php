@@ -36,13 +36,13 @@ class ProductController extends Controller
         PromotionRepository $promotionRepository,
         AttributeRepository $attributeRepository,
         ProductService $productService,
-    ){
+    ) {
         $this->productCatalogueRepository = $productCatalogueRepository;
         $this->productVariantRepository = $productVariantRepository;
         $this->promotionRepository = $promotionRepository;
         $this->attributeRepository = $attributeRepository;
         $this->productService = $productService;
-        $this->middleware(function($request, $next){
+        $this->middleware(function ($request, $next) {
             $locale = app()->getLocale(); // vn en cn
             $language = Language::where('canonical', $locale)->first();
             $this->language = $language->id;
@@ -50,22 +50,23 @@ class ProductController extends Controller
         });
     }
 
-    public function loadProductPromotion(Request $request){
+    public function loadProductPromotion(Request $request)
+    {
 
         $get = $request->input();
 
         $loadClass = loadClass($get['model']);
-        
-        if($get['model'] == 'Product'){
+
+        if ($get['model'] == 'Product') {
             $condition = [
                 ['tb2.language_id', '=', $this->language]
             ];
-            if(isset($get['keyword']) && $get['keyword'] != ''){
-                $keywordCondition = ['tb2.name','LIKE', '%'.$get['keyword'].'%'];
+            if (isset($get['keyword']) && $get['keyword'] != '') {
+                $keywordCondition = ['tb2.name', 'LIKE', '%' . $get['keyword'] . '%'];
                 array_push($condition, $keywordCondition);
             }
             $objects = $loadClass->findProductForPromotion($condition);
-        }else if($get['model'] == 'ProductCatalogue'){
+        } else if ($get['model'] == 'ProductCatalogue') {
 
             $conditionArray['keyword'] = ($get['keyword']) ?? null;
             $conditionArray['where'] = [
@@ -74,27 +75,28 @@ class ProductController extends Controller
 
             $objects = $loadClass->pagination(
                 [
-                    'product_catalogues.id', 
-                    'tb2.name', 
-                ], 
-                $conditionArray, 
+                    'product_catalogues.id',
+                    'tb2.name',
+                ],
+                $conditionArray,
                 20,
-                ['path' => 'product.catalogue.index'],  
+                ['path' => 'product.catalogue.index'],
                 ['product_catalogues.id', 'DESC'],
                 [
-                    ['product_catalogue_language as tb2','tb2.product_catalogue_id', '=' , 'product_catalogues.id']
-                ], 
+                    ['product_catalogue_language as tb2', 'tb2.product_catalogue_id', '=', 'product_catalogues.id']
+                ],
                 []
             );
         }
 
         return response()->json([
-            'model' => ($get['model']) ?? 'Product' ,
+            'model' => ($get['model']) ?? 'Product',
             'objects' => $objects,
         ]);
     }
 
-    public function loadProductVoucher(Request $request){
+    public function loadProductVoucher(Request $request)
+    {
 
         $get = $request->input();
 
@@ -104,40 +106,40 @@ class ProductController extends Controller
             ['tb2.language_id', '=', $this->language]
         ];
 
-        if(isset($get['keyword']) && $get['keyword'] != ''){
-            $keywordCondition = ['tb2.name','LIKE', '%'.$get['keyword'].'%'];
+        if (isset($get['keyword']) && $get['keyword'] != '') {
+            $keywordCondition = ['tb2.name', 'LIKE', '%' . $get['keyword'] . '%'];
             array_push($condition, $keywordCondition);
         }
 
         $objects = $loadClass->findProductForVoucher($condition);
 
         return response()->json([
-            'model' => ($get['model']) ?? 'Product' ,
+            'model' => ($get['model']) ?? 'Product',
             'objects' => $objects,
         ]);
-        
     }
-   
-    public function loadVariant(Request $request){
+
+    public function loadVariant(Request $request)
+    {
         $get = $request->input();
         $attributeId = $get['attribute_id'];
-        
+
         $attributeId = sortAttributeId($attributeId);
-        
+
         $variant = $this->productVariantRepository->findVariant($attributeId, $get['product_id'], $get['language_id']);
 
         $variantPromotion = $this->promotionRepository->findPromotionByVariantUuid($variant->uuid);
         $variantPrice = getVariantPrice($variant, $variantPromotion);
 
         return response()->json([
-            'variant' => $variant ,
+            'variant' => $variant,
             'variantPrice' => $variantPrice,
         ]);
-        
     }
-    
 
-    public function filter(Request $request){
+
+    public function filter(Request $request)
+    {
 
         $products = $this->productService->filter($request);
 
@@ -146,12 +148,13 @@ class ProductController extends Controller
         $html = $this->renderFilterProduct($products);
 
         return response()->json([
-            'data' => $html ,
+            'data' => $html,
             'countProduct' => $countProduct
         ]);
     }
 
-    public function renderFilterProduct($products){
+    public function renderFilterProduct($products)
+    {
         $html = '';
         if (!is_null($products) && count($products)) {
             $html .= '<div class="uk-grid uk-grid-medium">';
@@ -163,7 +166,7 @@ class ProductController extends Controller
                 $catName = $product->product_catalogues->first()->languages->first()->pivot->name;
                 $review = getReview($product);
                 $total_lesson = $product->total_lesson;
-                $duration = $product->duration; 
+                $duration = $product->duration;
                 $review['star'] = ($product->review_count == 0) ? '0' : $product->review_average / 5 * 100;
                 $lecturer_image = $product->lecturers->image;
                 $lecturer_name = $product->lecturers->name;
@@ -240,15 +243,16 @@ class ProductController extends Controller
         return $html;
     }
 
-  
 
-    public function wishlist(Request $request){
+
+    public function wishlist(Request $request)
+    {
         $id = $request->input('id');
         $wishlist = Cart::instance('wishlist')->content();
         $itemIndex = $wishlist->search(function ($item, $rowId) use ($id) {
             return $item->id === $id;
         });
-        
+
         $response['code'] = 0;
         $response['message'] = '';
         if ($itemIndex !== false) {
@@ -256,7 +260,6 @@ class ProductController extends Controller
 
             $response['code'] = 1;
             $response['message'] = 'Sản phẩm đã được xóa khỏi danh sách yêu thích';
-
         } else {
             Cart::instance('wishlist')->add([
                 'id' => $id,
@@ -272,21 +275,23 @@ class ProductController extends Controller
         return response()->json($response);
     }
 
-    public function updateOrder(Request $request){
+    public function updateOrder(Request $request)
+    {
         $payload['order'] =  $request->input('order');
         unset($payload['id']);
         $id = $request->input('id');
         $class = loadClass($request->input('model'));
         $update_order = $class->update($id, $payload);
         return response()->json([
-            'response' => $update_order, 
+            'response' => $update_order,
             'messages' => 'Cập nhật thứ tự thành công',
             'code' => (!$update_order) ? 11 : 10,
-        ]);  
+        ]);
     }
 
 
-    public function createTransaction(Request $request){
+    public function createTransaction(Request $request)
+    {
         try {
             DB::beginTransaction();
 
@@ -311,9 +316,9 @@ class ProductController extends Controller
              * Kiểm tra xem đã có transaction liên quan đến account đang muốn nạp hay là chưa??
              * --> Giả sử: lần đầu chọn 10k -> quantity = 1 --> tạo ra transaction_code = abc
              * --> nhưng ko chuyển khoản mà bấm chọn sang quantity = 2 --> lúc này gửi lên thì amount có rồi = 10k quantity thay = 2
-             * --> status tất nhiên vẫn pending 
-             * 
-             * 
+             * --> status tất nhiên vẫn pending
+             *
+             *
              */
             $existing = Transaction::where('product_id', $productId)
                 ->where('account', $account)
@@ -366,10 +371,8 @@ class ProductController extends Controller
                     'status'           => $existing->status,
                 ]
             ]);
-
-           
         } catch (\Throwable $th) {
-            Log::error('❌ Lỗi tạo giao dịch: '.$th->getMessage(), [
+            Log::error('❌ Lỗi tạo giao dịch: ' . $th->getMessage(), [
                 'trace' => $th->getTraceAsString()
             ]);
             DB::rollBack();
@@ -383,11 +386,12 @@ class ProductController extends Controller
         }
     }
 
-    public function checkTransactionStatus(Request $request){
+    public function checkTransactionStatus(Request $request)
+    {
         try {
 
             $transactionCode = $request->input('code');
-            if(!$transactionCode){
+            if (!$transactionCode) {
                 return response()->json([
                     'success' => false,
                     'data' => [
@@ -398,7 +402,7 @@ class ProductController extends Controller
             }
 
             $transaction = Transaction::where('transaction_code', $transactionCode)->first();
-            if(!$transaction){
+            if (!$transaction) {
                 return response()->json([
                     'success' => false,
                     'data' => [
@@ -431,9 +435,8 @@ class ProductController extends Controller
                     // 'account' => $transaction->account,
                 ]
             ]);
-            
         } catch (\Throwable $th) {
-             Log::error('❌ Lỗi kiểm tra trạng thái giao dịch: ' . $th->getMessage(), [
+            Log::error('❌ Lỗi kiểm tra trạng thái giao dịch: ' . $th->getMessage(), [
                 'trace' => $th->getTraceAsString()
             ]);
             return response()->json([
@@ -446,45 +449,45 @@ class ProductController extends Controller
         }
     }
 
-    public function createAccountTransaction(Request $request){
-        if(!auth('customer')->check()){
-            return response()->json([
-                'success' => false,
-                'data' => [
-                    'status' => 'unauthorized',
-                    'message' => 'Chưa đăng nhập'
-                ]
-            ]);
-        }
-
-
-
+    public function createAccountTransaction(Request $request)
+    {
         $product = Product::findOrFail($request->id);
-        $customer = auth('customer')->user();
+        $customer = auth('customer')->check() ? auth('customer')->user() : null;
         try {
             DB::beginTransaction();
             $amount = $product->price;
 
 
-            Transaction::where('product_id', $product->id)
-                ->where('customer_id', $customer->id)
-                ->where('type', 'account')
-                ->where('status', 'pending')
-                ->where('amount', '!=', $amount)
-                ->update([
-                    'status' => 'expired',
-                    'description' => 'Hết hiệu lực do thay đổi giá sản phẩm',
-                    'updated_at' => now(),
-                ]);
+            if ($customer) {
+                Transaction::where('product_id', $product->id)
+                    ->where('customer_id', $customer->id)
+                    ->where('type', 'account')
+                    ->where('status', 'pending')
+                    ->where('amount', '!=', $amount)
+                    ->update([
+                        'status' => 'expired',
+                        'description' => 'Hết hiệu lực do thay đổi giá sản phẩm',
+                        'updated_at' => now(),
+                    ]);
 
-             $existing = Transaction::where('product_id', $product->id)
-                ->where('customer_id', $customer->id)
-                ->where('type', 'account')
-                ->where('status', 'pending')
-                ->where('amount', $product->price)
-                ->where('created_at', '>=', now()->subMinutes(10))
-                ->lockForUpdate()
-                ->first();
+                $existing = Transaction::where('product_id', $product->id)
+                    ->where('customer_id', $customer->id)
+                    ->where('type', 'account')
+                    ->where('status', 'pending')
+                    ->where('amount', $product->price)
+                    ->where('created_at', '>=', now()->subMinutes(10))
+                    ->lockForUpdate()
+                    ->first();
+            } else {
+                $existing = Transaction::where('product_id', $product->id)
+                    ->whereNull('customer_id')
+                    ->where('type', 'account')
+                    ->where('status', 'pending')
+                    ->where('amount', $product->price)
+                    ->where('created_at', '>=', now()->subMinutes(10))
+                    ->lockForUpdate()
+                    ->first();
+            }
 
             $bankBin       = '970416';
             $accountNumber = '336883868386';
@@ -501,7 +504,7 @@ class ProductController extends Controller
                     $transaction = Transaction::create([
                         'transaction_code' => $transactionCode,
                         'product_id' => $product->id,
-                        'customer_id' => $customer->id,
+                        'customer_id' => $customer ? $customer->id : null,
                         'amount' => $amount,
                         'status' => 'pending',
                         'type' => 'account',
@@ -510,12 +513,21 @@ class ProductController extends Controller
                     // Nếu bị duplicate key (do unique constraint)
                     if (str_contains($e->getMessage(), 'Duplicate entry')) {
                         DB::rollBack();
-                        $transaction = Transaction::where('product_id', $product->id)
-                            ->where('customer_id', $customer->id)
-                            ->where('type', 'account')
-                            ->where('status', 'pending')
-                            ->latest('id')
-                            ->first();
+                        if ($customer) {
+                            $transaction = Transaction::where('product_id', $product->id)
+                                ->where('customer_id', $customer->id)
+                                ->where('type', 'account')
+                                ->where('status', 'pending')
+                                ->latest('id')
+                                ->first();
+                        } else {
+                            $transaction = Transaction::where('product_id', $product->id)
+                                ->whereNull('customer_id')
+                                ->where('type', 'account')
+                                ->where('status', 'pending')
+                                ->latest('id')
+                                ->first();
+                        }
                     } else {
                         throw $e;
                     }
@@ -541,9 +553,6 @@ class ProductController extends Controller
                     'status' => $transaction->status,
                 ]
             ]);
-
-
-
         } catch (\Throwable $th) {
             Log::error('❌ Lỗi kiểm tra trạng thái giao dịch: ' . $th->getMessage(), [
                 'trace' => $th->getTraceAsString()
@@ -597,8 +606,8 @@ class ProductController extends Controller
                 'paid_at' => $transaction->paid_at
                     ? \Carbon\Carbon::parse($transaction->paid_at)->format('d/m/Y H:i:s')
                     : null,
-                        ]);
-                    }
+            ]);
+        }
 
         // 🔴 Nếu transaction bị lỗi hoặc invalid
         return response()->json([
@@ -607,5 +616,4 @@ class ProductController extends Controller
             'message' => 'Giao dịch không hợp lệ hoặc đã bị hủy.',
         ]);
     }
-    
 }
