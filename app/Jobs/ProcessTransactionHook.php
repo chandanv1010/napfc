@@ -101,8 +101,8 @@ class ProcessTransactionHook implements ShouldQueue
     protected function callPythonRecharge($transaction)
     {
         try {
+            // ✅ Đảm bảo dùng URL production, không phải localhost
             $url = "https://api.napfc.com/auto-tool";
-            // $url = "http://127.0.0.1:8001/auto-tool";
             $apiKey = env('PYTHON_API_KEY', 'HTVIETNAM_CHANDANV1010@GMAIL.COM');
 
             $payload = [
@@ -112,18 +112,47 @@ class ProcessTransactionHook implements ShouldQueue
                 'quantity' => $transaction->quantity
             ];
 
+            // Log trước khi gọi để debug
+            Log::info("📤 Đang gọi Python API:", [
+                'url' => $url,
+                'payload' => $payload,
+            ]);
 
-            $response = Http::withHeaders([
-                'X-API-Key' => $apiKey,
-            ])->post($url, $payload);
+            // ✅ Thêm Content-Type và timeout
+            $response = Http::timeout(30)
+                ->withHeaders([
+                    'X-API-Key' => $apiKey,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ])
+                ->asJson() // Đảm bảo gửi dạng JSON
+                ->post($url, $payload);
+
+            // Log response
+            Log::info("📥 Response từ Python API:", [
+                'status' => $response->status(),
+                'successful' => $response->successful(),
+            ]);
 
             if ($response->successful()) {
                 Log::info("✅ Đã gửi yêu cầu nạp tiền sang Python thành công:", $response->json());
             } else {
-                Log::error("❌ Gửi sang Python thất bại: " . $response->body());
+                Log::error("❌ Gửi sang Python thất bại:", [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                    'headers' => $response->headers(),
+                ]);
             }
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            // Lỗi kết nối riêng (timeout, DNS, connection refused)
+            Log::error("🚨 Lỗi kết nối khi gọi FastAPI: " . $e->getMessage(), [
+                'url' => $url ?? 'N/A',
+                'payload' => $payload ?? null,
+            ]);
         } catch (\Throwable $e) {
             Log::error("🚨 Lỗi khi gọi FastAPI: " . $e->getMessage(), [
+                'url' => $url ?? 'N/A',
+                'payload' => $payload ?? null,
                 'trace' => $e->getTraceAsString()
             ]);
         }
