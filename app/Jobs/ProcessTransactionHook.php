@@ -81,13 +81,8 @@ class ProcessTransactionHook implements ShouldQueue
                 'paid_at' => now(),
                 'description'    => 'Webhook xác nhận đã nhận tiền',
             ]);
-
             Log::info('Transaction: ', $transaction->toArray());
-
-          
             DB::commit();
-
-
             // ✅ 3. Gọi Python để xử lý nạp tiền
             $this->callPythonRecharge($transaction);
 
@@ -106,8 +101,8 @@ class ProcessTransactionHook implements ShouldQueue
     protected function callPythonRecharge($transaction)
     {
         try {
-            // $url = "https://api.napfc.com/auto-tool";
-            $url = "http://127.0.0.1:8001/auto-tool";
+            $url = "https://api.napfc.com/auto-tool";
+            // $url = "http://127.0.0.1:8001/auto-tool";
             $apiKey = env('PYTHON_API_KEY', 'HTVIETNAM_CHANDANV1010@GMAIL.COM');
 
             $payload = [

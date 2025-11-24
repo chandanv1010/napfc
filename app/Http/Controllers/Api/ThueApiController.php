@@ -19,12 +19,8 @@ class ThueApiController extends Controller
         try {
 
             $token = config('app.thue_api_token');
-            dd($token);
-
             $thueapiToken = $request->header('X-Thueapi');
-
             if ($token !== $thueapiToken) {
-
                 return response([
                     'success' => false,
                     'message' => 'Token missmatch !'
