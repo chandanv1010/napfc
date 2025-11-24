@@ -17,6 +17,21 @@ class ThueApiController extends Controller
     public function hook(Request $request)
     {
         try {
+
+            $token = config('app.thue_api_token');
+            dd($token);
+
+            $thueapiToken = $request->header('X-Thueapi');
+
+            if ($token !== $thueapiToken) {
+
+                return response([
+                    'success' => false,
+                    'message' => 'Token missmatch !'
+                ], 401);
+            }
+
+
             $content = strtoupper(trim($request->input('content', '')));
             $money = $request->has('money') ? (int)$request->input('money') : null;
 

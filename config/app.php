@@ -18,6 +18,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'thue_api_token' => env('THUE_API_TOKEN', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
