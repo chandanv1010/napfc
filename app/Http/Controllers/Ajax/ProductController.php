@@ -369,6 +369,10 @@ class ProductController extends Controller
                     'transaction_code' => $transactionCode,
                     'qr_image'         => $qrLink,
                     'status'           => $existing->status,
+                    'messages' => [
+                        'Hệ thống đang xử lý giao dịch',
+                        'Quý khách vui lòng đợi và dừng thoát khỏi màn hình.'
+                    ],
                 ]
             ]);
         } catch (\Throwable $th) {
@@ -551,6 +555,10 @@ class ProductController extends Controller
                     'transaction_code' => $transaction->transaction_code,
                     'qr_image' => $qrLink,
                     'status' => $transaction->status,
+                    'messages' => [
+                        'Hệ thống đang xử lý giao dịch',
+                        'Quý khách vui lòng đợi và dừng thoát khỏi màn hình.'
+                    ],
                 ]
             ]);
         } catch (\Throwable $th) {

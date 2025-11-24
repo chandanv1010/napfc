@@ -575,7 +575,7 @@
                     if (res?.success && res.data?.status === 'pending') {
                         next.push(pending[i])
                     } else if (res.success && res.data?.status === 'success') {
-                        console.log('Polling Success, Close QR Popup');
+                        toastr.success('Giao dịch hoàn tất, hệ thống sẽ đóng QR.');
                         qrModal.hide();
                     }
                 })

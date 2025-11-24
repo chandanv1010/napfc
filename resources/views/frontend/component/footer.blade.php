@@ -72,6 +72,10 @@
             {!! isset($showSubDescription) ? '<div class="uk-text-center">NẾU ĐÃ THANH TOÁN KHÔNG ĐÓNG POPUP NÀY</div>' : '' !!}
         </p>
         <img id="qr_image" src="" alt="QR Code">
+        <div class="qr-processing-note uk-text-center">
+            <p>Hệ thống đang xử lý giao dịch</p>
+            <p>Quý khách vui lòng đợi và đừng thoát khỏi màn hình.</p>
+        </div>
     </div>
 </div>
 
