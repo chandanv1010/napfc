@@ -7,6 +7,10 @@
     var timer;
     var $carousel = $(".owl-slide");
     var _token = $('meta[name="csrf-token"]').attr('content');
+    const formatNumber = (value) => {
+        const amount = Number(value || 0);
+        return new Intl.NumberFormat('vi-VN').format(amount);
+    };
 
     HT.swiperOption = (setting) => {
         // console.log(setting);
@@ -471,6 +475,96 @@
 
     let checkStatus = null;
     let lastStatus = null;
+    HT.ensureOrderPaymentModal = () => {
+        let $modal = $('#order-payment-modal');
+        if ($modal.length) return $modal;
+
+        const modalHtml = `
+            <div id="order-payment-modal" class="uk-modal">
+                <div class="uk-modal-dialog payment-modal-dark">
+                    <button type="button" class="uk-modal-close uk-close"></button>
+                    <div class="uk-modal-header">
+                        <h2 class="uk-modal-title">Thông tin thanh toán chi tiết</h2>
+                    </div>
+                    <div class="uk-modal-body">
+                        <div class="payment-info-box">
+                            <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="bank-card blue-gradient h100">
+                                        <div class="bank-header">
+                                            <i class="fa fa-bank"></i> Thông tin chuyển khoản
+                                        </div>
+                                        <div class="bank-details mt10">
+                                            <div class="bank-row">
+                                                <div class="bank-label">Ngân hàng</div>
+                                                <div class="bank-value-line">
+                                                    <span class="bank-value">ACB</span>
+                                                    <i class="fa fa-copy btn-copy"></i>
+                                                </div>
+                                            </div>
+                                            <div class="bank-row">
+                                                <div class="bank-label">Số tài khoản</div>
+                                                <div class="bank-value-line">
+                                                    <span class="bank-value bold">24982281</span>
+                                                    <i class="fa fa-copy btn-copy"></i>
+                                                </div>
+                                            </div>
+                                            <div class="bank-row">
+                                                <div class="bank-label">Chủ tài khoản</div>
+                                                <div class="bank-value-line">
+                                                    <span class="bank-value bold uppercase">NGUYEN VAN DO</span>
+                                                    <i class="fa fa-copy btn-copy"></i>
+                                                </div>
+                                            </div>
+                                            <div class="bank-row">
+                                                <div class="bank-label">Số tiền</div>
+                                                <div class="bank-value-line">
+                                                    <span class="bank-value bold text-yellow"><span class="transfer-amount-val">0</span> VND</span>
+                                                    <i class="fa fa-copy btn-copy"></i>
+                                                </div>
+                                            </div>
+                                            <div class="bank-row">
+                                                <div class="bank-label">Nội dung</div>
+                                                <div class="bank-value-line">
+                                                    <span class="bank-value bold text-yellow"><span class="transfer-content-val">---</span></span>
+                                                    <i class="fa fa-copy btn-copy"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="uk-width-medium-1-2">
+                                    <div class="qr-card dark-glass h100">
+                                        <div class="qr-header">
+                                            <i class="fa fa-qrcode"></i> Quét mã QR
+                                        </div>
+                                        <div class="qr-image mt10">
+                                            <img src="" alt="QR Code VietQR" loading="lazy">
+                                        </div>
+                                        <div class="qr-footer mt10">
+                                            Quét mã QR bằng ứng dụng ngân hàng để chuyển khoản nhanh chóng
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-guide-box mt20">
+                            <div class="guide-title"><i class="fa fa-warning"></i> Hướng dẫn thanh toán</div>
+                            <ol class="guide-list mt10">
+                                <li>Chuyển khoản đúng số tiền và nội dung như trên</li>
+                                <li>Sau khi chuyển khoản, hệ thống sẽ tự động xác nhận trong vòng 1-2 phút</li>
+                                <li>Bạn sẽ nhận được link truy cập thông tin tài khoản sau khi thanh toán thành công</li>
+                                <li>Link truy cập chỉ có hiệu lực trong 1 giờ</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        $('body').append(modalHtml);
+        return $('#order-payment-modal');
+    };
 
     HT.buyAccount = () => {
         $(document).off('click', '.btn-buy-account').on('click', '.btn-buy-account', function (e) {
@@ -497,7 +591,11 @@
                 data: option,
                 dataType: 'json',
                 beforeSend: function () {
+                    HT.ensureOrderPaymentModal();
                     $('#qr_image').attr('src', '');
+                    $('#order-payment-modal .qr-image img').attr('src', '');
+                    $('#order-payment-modal .transfer-content-val').text('---');
+                    $('#order-payment-modal .transfer-amount-val').text('0');
                     _this.prop('disabled', true).html(`
                         <div>
                             <div style="color:#fff;font-size:16px;text-transform:uppercase;font-weight:bold">
@@ -516,10 +614,28 @@
                     const data = res.data;
                     const $qrImage = $('#qr_image');
                     $qrImage.attr('src', data.qr_image);
+                    const hasDetailModal = HT.ensureOrderPaymentModal().length > 0;
+                    const paymentModal = UIkit.modal('#order-payment-modal');
+                    const $modalQrImage = $('#order-payment-modal .qr-image img');
+
+                    if (hasDetailModal) {
+                        if (data.transaction_code) {
+                            $('#order-payment-modal .transfer-content-val').text(data.transaction_code);
+                        }
+                        if (data.amount) {
+                            $('#order-payment-modal .transfer-amount-val').text(formatNumber(data.amount));
+                        }
+                        if ($modalQrImage.length && data.qr_image) {
+                            $modalQrImage.attr('src', data.qr_image);
+                        }
+                        paymentModal.show();
+                    }
 
                     $qrImage.off('load').on('load', function () {
-                        const modal = UIkit.modal('.qrcodeModal');
-                        modal.show();
+                        const qrCodeModal = UIkit.modal('.qrcodeModal');
+                        if (!hasDetailModal) {
+                            qrCodeModal.show();
+                        }
 
                         //  Polling trạng thái
                         let waited = 0;
@@ -539,8 +655,11 @@
                                         clearInterval(checkStatus);
                                         checkStatus = null;
 
-                                        // Tắt modal QR code
-                                        modal.hide();
+                                        if (hasDetailModal) {
+                                            paymentModal.hide();
+                                        } else {
+                                            qrCodeModal.hide();
+                                        }
 
                                         // Hiển thị thông tin tài khoản trong modal (chỉ mở 1 lần cho mỗi transaction)
                                         if (resp.account_info) {
@@ -562,7 +681,11 @@
                                     } else if (resp.status === 'expired' || resp.status === 'invalid') {
                                         clearInterval(checkStatus);
                                         checkStatus = null;
-                                        modal.hide();
+                                        if (hasDetailModal) {
+                                            paymentModal.hide();
+                                        } else {
+                                            qrCodeModal.hide();
+                                        }
                                         toastr.info('Giao dịch đã hết hạn, vui lòng tạo lại.');
                                     }
                                 }
@@ -717,7 +840,7 @@
 
 
 
-        $(document).on('hidden.uk.modal', '.qrcodeModal', function () {
+        $(document).on('hidden.uk.modal', '.qrcodeModal, #order-payment-modal', function () {
             if (checkStatus) {
                 clearInterval(checkStatus);
                 checkStatus = null;

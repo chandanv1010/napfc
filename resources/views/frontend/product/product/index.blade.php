@@ -98,31 +98,133 @@
                     <div class="uk-grid uk-grid-small uk-grid-width-1-2 uk-grid-width-medium-1-3 uk-grid-width-large-1-4">
                         @foreach ($productCatalogue->products->take(8) as $valPost)
                             @php
-                                $name = $valPost->languages->first()->pivot->name;
-                                $image = $valPost->image;
-                                $canonical = write_url($valPost->languages->first()->pivot->canonical);
-                                $priceRel = getPrice($valPost);
-                                $descRel = cutnchar(strip_tags($valPost->languages->first()->pivot->description), 80);
-                            @endphp
-                            <div class="mb20">
-                                <div class="account-item">
-                                    <a href="{{ $canonical }}" class="image img-cover">
-                                        <img src="{{ $image }}" alt="{{ $name }}">
-                                    </a>
-                                    <div class="info">
-                                        <h3 class="name"><a href="{{ $canonical }}">{{ $name }}</a></h3>
-                                        <div class="price">{!! $priceRel['html'] !!}</div>
-                                        <div class="description">{!! $descRel !!}</div>
-                                    </div>
-                                    <button type="button" class="btn-buynow">Mua ngay</button>
-                                </div>
-                            </div>
+                                            $prodLang = $valPost->languages;
+                                            if (is_object($prodLang) && method_exists($prodLang, 'first')) {
+                                                $prodLang = $prodLang->first();
+                                            } elseif (is_array($prodLang)) {
+                                                $prodLang = $prodLang[0] ?? null;
+                                            }
+                                            $name = $prodLang->pivot->name ?? $prodLang->name ?? '';
+                                            $description = $prodLang->pivot->description ?? $prodLang->description ?? '';
+                                            $canonical = write_url($prodLang->pivot->canonical ?? $prodLang->canonical ?? '#');
+                                            $price = getPrice($valPost);
+                                            $image = $valPost->image;
+                                        @endphp
+                                        <div class="uk-width-1-1 uk-width-small-1-2 uk-width-medium-1-3 uk-width-large-1-4 mb20 product-grid-item"
+                                             data-price="{{ $valPost->price }}"
+                                             data-name="{{ strtolower($name) }}"
+                                             data-code="{{ strtolower($valPost->code) }}"
+                                             data-created="{{ $valPost->id }}">
+                                            <div class="account-item">
+                                                <a href="{{ $canonical }}" class="image img-cover uk-display-block">
+                                                    <img src="{{ $image }}" alt="{{ $name }}">
+                                                </a>
+                                                <div class="info">
+                                                    <h3 class="name"><a href="{{ $canonical }}">{{ $name }}</a></h3>
+                                                    <div class="price-row">
+                                                        <div class="badge-wrapper">
+                                                            <img src="{{ asset('vendor/frontend/resources/img/project/badge_code.png') }}" alt="coin" class="coin-icon">
+                                                            <span class="badge-code">#{{ substr($product->code, 0, 4) }}</span>
+                                                        </div>
+                                                        <div class="price">
+                                                            {!! $price['html'] !!}
+                                                            <div class="readmore"><a href="{{ $canonical }}">KIỂM TRA THÔNG TIN</a></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="description">
+                                                        {!! $description !!}
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn-buynow">MUA NGAY</button>
+                                            </div>
+                                        </div>
                         @endforeach
                     </div>
                 </section>
                 @endif
             </div>
         </section>
+    </div>
+
+    <div id="order-payment-modal" class="uk-modal">
+        <div class="uk-modal-dialog payment-modal-dark">
+            <button type="button" class="uk-modal-close uk-close"></button>
+            <div class="uk-modal-header">
+                <h2 class="uk-modal-title">Thông tin thanh toán chi tiết</h2>
+            </div>
+            <div class="uk-modal-body">
+                <div class="payment-info-box">
+                    <div class="uk-grid uk-grid-medium" data-uk-grid-margin>
+                        <div class="uk-width-medium-1-2">
+                            <div class="bank-card blue-gradient h100">
+                                <div class="bank-header">
+                                    <i class="fa fa-bank"></i> Thông tin chuyển khoản
+                                </div>
+                                <div class="bank-details mt10">
+                                    <div class="bank-row">
+                                        <div class="bank-label">Ngân hàng</div>
+                                        <div class="bank-value-line">
+                                            <span class="bank-value">ACB</span>
+                                            <i class="fa fa-copy btn-copy"></i>
+                                        </div>
+                                    </div>
+                                    <div class="bank-row">
+                                        <div class="bank-label">Số tài khoản</div>
+                                        <div class="bank-value-line">
+                                            <span class="bank-value bold">24982281</span>
+                                            <i class="fa fa-copy btn-copy"></i>
+                                        </div>
+                                    </div>
+                                    <div class="bank-row">
+                                        <div class="bank-label">Chủ tài khoản</div>
+                                        <div class="bank-value-line">
+                                            <span class="bank-value bold uppercase">NGUYEN VAN DO</span>
+                                            <i class="fa fa-copy btn-copy"></i>
+                                        </div>
+                                    </div>
+                                    <div class="bank-row">
+                                        <div class="bank-label">Số tiền</div>
+                                        <div class="bank-value-line">
+                                            <span class="bank-value bold text-yellow"><span class="transfer-amount-val">0</span> VND</span>
+                                            <i class="fa fa-copy btn-copy"></i>
+                                        </div>
+                                    </div>
+                                    <div class="bank-row">
+                                        <div class="bank-label">Nội dung</div>
+                                        <div class="bank-value-line">
+                                            <span class="bank-value bold text-yellow"><span class="transfer-content-val">---</span></span>
+                                            <i class="fa fa-copy btn-copy"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uk-width-medium-1-2">
+                            <div class="qr-card dark-glass h100">
+                                <div class="qr-header">
+                                    <i class="fa fa-qrcode"></i> Quét mã QR
+                                </div>
+                                <div class="qr-image mt10">
+                                    <img src="" alt="QR Code VietQR" loading="lazy">
+                                </div>
+                                <div class="qr-footer mt10">
+                                    Quét mã QR bằng ứng dụng ngân hàng để chuyển khoản nhanh chóng
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-guide-box mt20">
+                    <div class="guide-title"><i class="fa fa-warning"></i> Hướng dẫn thanh toán</div>
+                    <ol class="guide-list mt10">
+                        <li>Chuyển khoản đúng số tiền và nội dung như trên</li>
+                        <li>Sau khi chuyển khoản, hệ thống sẽ tự động xác nhận trong vòng 1-2 phút</li>
+                        <li>Bạn sẽ nhận được link truy cập thông tin tài khoản sau khi thanh toán thành công</li>
+                        <li>Link truy cập chỉ có hiệu lực trong 1 giờ</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>

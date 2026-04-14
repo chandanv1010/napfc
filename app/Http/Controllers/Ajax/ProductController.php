@@ -554,6 +554,7 @@ class ProductController extends Controller
                 'data' => [
                     'id' => $transaction->id,
                     'transaction_code' => $transaction->transaction_code,
+                    'amount' => (int) $transaction->amount,
                     'qr_image' => $qrLink,
                     'status' => $transaction->status,
                     'messages' => [
