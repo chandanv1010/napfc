@@ -1,79 +1,55 @@
 @extends('frontend.homepage.layout')
 @section('content')
-    <div class="profile-container pt20 pb20">
+    <div class="dashboard-page-wrapper pt40 pb40">
         <div class="uk-container uk-container-center">
             <div class="uk-grid uk-grid-medium">
                 <div class="uk-width-large-1-4">
                     @include('frontend.auth.customer.components.sidebar')
                 </div>
-                <div class="uk-width-large-2-4">
-                    <div class="panel-profile">
-                        <div class="panel-head">
-                            <h2 class="heading-2"><span>Hồ sơ của tôi</span></h2>
-                            <div class="description">
-                                Quản lý thông tin hồ sơ để bảo mật tài khoản
-                            </div>
+                <div class="uk-width-large-3-4">
+                    <div class="dashboard-premium-box">
+                        <div class="box-head">
+                            <h2 class="title">HỒ SƠ CỦA TÔI</h2>
+                            <p class="subtitle">Quản lý thông tin hồ sơ để bảo mật tài khoản</p>
                         </div>
-                        <div class="panel-body">
+                        <div class="box-body">
                             @include('backend/dashboard/component/formError')
-                            <form action="{{ route('customer.profile.update') }}" method="post" class="uk-form uk-form-horizontal login-form profile-form">
+                            <form action="{{ route('customer.profile.update') }}" method="post" class="uk-form uk-form-horizontal dashboard-form">
                                 @csrf
-                                <div class="uk-form-row form-row">
-                                    <label class="uk-form-label" for="form-h-it">Tài khoản đăng nhập</label>
-                                    <div class="uk-form-controls">
-                                        {{ $buyer->email }}
+                                <div class="form-group row">
+                                    <label class="form-label">Tài khoản đăng nhập</label>
+                                    <div class="form-content">
+                                        <span class="user-email">{{ $buyer->email }}</span>
                                     </div>
                                 </div>
                                 
-                                <div class="uk-form-row form-row">
-                                    <label class="uk-form-label" for="form-h-it">Họ Tên</label>
-                                    <div class="uk-form-controls">
-                                        <input 
-                                            type="text" 
-                                            class="input-text"
-                                            placeholder="Họ Tên"
-                                            name="name"
-                                            value="{{ old('name', $buyer->name) }}"
-                                        >
+                                <div class="form-group row">
+                                    <label class="form-label">Họ Tên</label>
+                                    <div class="form-content">
+                                        <input type="text" class="form-input" name="name" value="{{ old('name', $buyer->name) }}" placeholder="Nhập họ tên của bạn">
                                     </div>
                                 </div>
-                                <div class="uk-form-row form-row">
-                                    <label class="uk-form-label" for="form-h-it">Email</label>
-                                    <div class="uk-form-controls">
-                                        <input 
-                                            type="text" 
-                                            class="input-text"
-                                            placeholder="Email"
-                                            name="email"
-                                            value="{{ old('email', $buyer->email) }}"
-                                        >
+                                <div class="form-group row">
+                                    <label class="form-label">Email</label>
+                                    <div class="form-content">
+                                        <input type="email" class="form-input" name="email" value="{{ old('email', $buyer->email) }}" placeholder="Nhập địa chỉ email">
                                     </div>
                                 </div>
-                                <div class="uk-form-row form-row">
-                                    <label class="uk-form-label" for="form-h-it">Số điện thoại</label>
-                                    <div class="uk-form-controls">
-                                        <input 
-                                            type="text" 
-                                            class="input-text"
-                                            placeholder="Số điện thoại"
-                                            name="phone"
-                                            value="{{ old('phone', $buyer->phone) }}"
-                                        >
+                                <div class="form-group row">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <div class="form-content">
+                                        <input type="text" class="form-input" name="phone" value="{{ old('phone', $buyer->phone) }}" placeholder="Nhập số điện thoại">
                                     </div>
                                 </div>
-                                <div class="uk-form-row form-row">
-                                    <label class="uk-form-label" for="form-h-it">Địa chỉ</label>
-                                    <div class="uk-form-controls">
-                                        <input 
-                                            type="text" 
-                                            class="input-text"
-                                            placeholder="Địa chỉ"
-                                            name="address"
-                                            value="{{ old('address', $buyer->address) }}"
-                                        >
+                                <div class="form-group row">
+                                    <label class="form-label">Địa chỉ</label>
+                                    <div class="form-content">
+                                        <input type="text" class="form-input" name="address" value="{{ old('address', $buyer->address) }}" placeholder="Nhập địa chỉ của bạn">
                                     </div>
                                 </div>
-                                <button type="submit" name="send" value="create">Lưu thông tin</button>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn-dashboard-submit">LƯU THÔNG TIN</button>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -81,8 +57,4 @@
             </div>
         </div>
     </div>
-
 @endsection
-
-
-

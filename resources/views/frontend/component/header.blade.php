@@ -43,5 +43,18 @@
 @include('frontend.component.header-mobile')
 
 <script>
-    window.isAuthenticated = @json(Auth::check())
+    window.isAuthenticated = @json(Auth::check());
+
+    $(document).ready(function() {
+        var header = $('.pc-header');
+        var scrollThreshold = 100;
+
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > scrollThreshold) {
+                header.addClass('is-sticky');
+            } else {
+                header.removeClass('is-sticky');
+            }
+        });
+    });
 </script>

@@ -1,62 +1,9 @@
 <footer class="footer">
-    <div class="uk-container uk-container-center">
-        <div class="uk-grid uk-grid-medium">
-            <div class="uk-width-large-1-4">
-                <div class="footer-infor">
-                    <a href="" class="image"><img src="{{ $system['homepage_logo'] }}" alt="logo"></a>
-                    <div class="footer-address mt20">
-                        <p>Địa chỉ: {{ $system['contact_address'] }}</p>
-                        <p>Hotline: {{ $system['contact_hotline'] }}</p>
-                        <p>Email: {{ $system['contact_email'] }}</p>
-                    </div>
-                    <div class="footer-social uk-flex uk-flex-middle mt40">
-                        <a href="{!! $system['social_facebook'] !!}"><i class="fa fa-facebook"></i></a>
-                        <a href="{!! $system['social_facebook'] !!}"><i class="fa fa-google"></i></a>
-                        <a href="{!! $system['social_facebook'] !!}"><i class="fa fa-youtube"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="uk-width-large-2-4">
-                @if (isset($menu['footer-menu']))
-                    @foreach ($menu['footer-menu'] as $key => $val)
-                        @php
-                            $name = $val['item']->languages->first()->pivot->name;
-                        @endphp
-                        <div class="footer-menu">
-                            <h2 class="footer-heading">{{ $name }}</h2>
-                            @if (isset($val['children']))
-                                <ul class="uk-list uk-clearfix uk-grid uk-grid-medium uk-grid-width-large-1-2">
-                                    @foreach ($val['children'] as $children)
-                                        @php
-                                            $nameC = $children['item']->languages->first()->pivot->name;
-                                            $canonical = $children['item']->languages->first()->pivot->canonical;
-                                        @endphp
-                                        <li><a href="{{ $canonical }}">{{ $nameC }}</a></li>
-                                    @endforeach
-                                </ul>
-                            @endif
-                        </div>
-                    @endforeach
-                @endif
-            </div>
-            <div class="uk-width-large-1-4">
-                <div class="footer-menu">
-                    <div class="footer-heading">Liên Kết Nhanh</div>
-                    <ul class="uk-list ">
-                        <li><a href="{{ write_url('dang-nhap') }}">Đăng nhập</a></li>
-                        <li><a href="{{ write_url('dang-ky') }}">Đăng ký</a></li>
-                        <li><a href="{{ write_url('tai-khoan') }}">Tài khoản</a></li>
-                        <li><a href="{{ write_url('huong-dan') }}">Hướng dẫn</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <div class="copyright">
+        {{ $system['homepage_copyright'] ?? 'Copyright 2025 &copy; NAPFCO.COM - Nạp FCONLINE, Mua Thẻ Garena, Giờ Reset Cầu Thủ, Review Mua Bán Cầu Thủ FC Online Thiết kế và vận hành bởi DANGHIEU.COM' }}
     </div>
-
 </footer>
-<div class="copyright">
-    {{ $system['homepage_copyright'] }}
-</div>
+
 
 <div class="uk-modal qrcodeModal">
     <div class="uk-modal-dialog">

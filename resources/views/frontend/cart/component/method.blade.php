@@ -23,8 +23,8 @@
             <h3>{{ $system['text_8'] }}</h3>
             <div class="bank-details">
                 <p><strong>Ngân hàng:</strong> {{ $system['bank_1'] }}</p>
-                <p><strong>Số tài khoản:</strong> {{ $system['bank_2'] }}</p>
-                <p><strong>Chủ tài khoản:</strong> {{ $system['bank_3'] }}</p>
+                <p><strong>Số TK:</strong> {{ $system['bank_2'] }}</p>
+                <p><strong>Chủ TK:</strong> {{ $system['bank_3'] }}</p>
             </div>
             <p class="note">{{ $system['text_9'] }}</p>
         </div>

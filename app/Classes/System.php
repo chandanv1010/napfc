@@ -13,6 +13,7 @@ class System{
                 'slogan' => ['type' => 'text', 'label' => 'Slogan'],
                 'logo' => ['type' => 'images', 'label' => 'Logo Website', 'title' => 'Click vào ô phía dưới để tải logo'],
                 'favicon' => ['type' => 'images', 'label' => 'Favicon', 'title' => 'Click vào ô phía dưới để tải logo'],
+                'background' => ['type' => 'images', 'label' => 'Background Website', 'title' => 'Click vào ô phía dưới để tải hình nền'],
                 'copyright' => ['type' => 'text', 'label' => 'Copyright'],
                 'website' => [
                     'type' => 'select', 

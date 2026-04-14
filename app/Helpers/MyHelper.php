@@ -281,6 +281,7 @@ if(!function_exists('renderSystemSelect')){
 if(!function_exists('write_url')){
     function write_url($canonical = null, bool $fullDomain = true, $suffix = true){
         $canonical = ($canonical) ?? '';
+        if($canonical == '.') return ($fullDomain === true) ? config('app.url') : '/';
         if(strpos($canonical, 'http') !== false){
             return $canonical;
         }

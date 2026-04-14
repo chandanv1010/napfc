@@ -2,8 +2,8 @@
 
 @section('content')
 <div id="prd-catalogue" class="page-body">
-    <x-breadcrumb :breadcrumb="$breadcrumb" />
      <div class="uk-container uk-container-center">
+         <x-breadcrumb :breadcrumb="$breadcrumb" />
      	<div class="prd-catalogue-wrapper">
      		<div class="prd-catalogue">
                 <div class="prd-catalogue_description">

@@ -51,6 +51,14 @@ class HomeController extends FrontendController
             ['keyword' => 'about-us-2'],
         ], $this->language);
 
+        $accountCategories = \App\Models\ProductCatalogue::where('parent_id', 2)
+            ->where('publish', 2)
+            ->with(['languages', 'products' => function($q) { 
+                $q->where('publish', 2)->with('languages'); 
+            }])
+            ->orderBy('order', 'desc')
+            ->get();
+
 
 
         $system = $this->system;
@@ -70,8 +78,44 @@ class HomeController extends FrontendController
             'system',
             'schema',
             'widgets',
+            'accountCategories',
         ));
     }
+    
+    public function garena()
+    {
+        $config = $this->config();
+        
+        $slides = $this->slideService->getSlide(
+            [SlideEnum::MAIN],
+            $this->language
+        );
+
+        $widgets = $this->widgetService->getWidget([
+            ['keyword' => 'news'],
+            ['keyword' => 'garena-card', 'object' => true],
+        ], $this->language);
+
+        $system = $this->system;
+        $seo = [
+            'meta_title' => 'Mua Thẻ Garena Giá Rẻ - Uy Tín',
+            'meta_keyword' => 'garena, mua thẻ garena, nạp sò',
+            'meta_description' => 'Trang mua thẻ Garena uy tín, giá rẻ nhất thị trường.',
+            'meta_image' => $this->system['seo_meta_images'],
+            'canonical' => route('home.garena'),
+        ];
+        $schema = $this->schema($seo);
+        $template = 'frontend.homepage.home.garena';
+        return view($template, compact(
+            'config',
+            'slides',
+            'seo',
+            'system',
+            'schema',
+            'widgets',
+        ));
+    }
+
 
 
     private function schema($seo)

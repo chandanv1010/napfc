@@ -367,6 +367,7 @@ class ProductController extends Controller
                 'data' => [
                     'id' => $existing->id,
                     'transaction_code' => $transactionCode,
+                    'amount'           => (int) ($existing->amount * $existing->quantity),
                     'qr_image'         => $qrLink,
                     'status'           => $existing->status,
                     'messages' => [

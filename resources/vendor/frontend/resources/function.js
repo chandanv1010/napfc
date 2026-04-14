@@ -271,91 +271,200 @@
     }
 
     HT.chooseGarenaCard = () => {
+        // Utility functions
+        function formatNumber(num) {
+            return new Intl.NumberFormat('vi-VN').format(num);
+        }
+
+        function showStep(sidebar, stepIndex) {
+            const $sidebar = $(sidebar);
+            $sidebar.find('.checkout-step').removeClass('active');
+            $sidebar.find('.step-' + stepIndex).addClass('active');
+
+            if (stepIndex > 0) {
+                $sidebar.addClass('is-checkout');
+            } else {
+                $sidebar.removeClass('is-checkout');
+            }
+        }
+
+        function updateStepData(sidebar, product, quantity) {
+            const $sidebar = $(sidebar);
+            const price = parseFloat(product.price);
+            const totalPrice = price * quantity;
+            const name = product.languages[0]?.name ?? 'Thẻ Garena';
+
+            $sidebar.find('.total-price-val').each(function() {
+                const suffix = $(this).hasClass('text-yellow') ? '' : ' ₫';
+                $(this).text(formatNumber(totalPrice) + suffix);
+            });
+            $sidebar.find('.product-name-val').text(name);
+            $sidebar.find('.unit-price-val').text(formatNumber(price) + ' đ');
+            $sidebar.find('.quantity-val').text(quantity);
+
+            // Store product data on sidebar for later use
+            $sidebar.data('currentProduct', product);
+            $sidebar.data('currentQuantity', quantity);
+        }
+
+        // 1. Card click → Show Step 1 (Consent)
         $(document).on('click', '.garena-item', function () {
             const _this = $(this);
-            const card = JSON.parse(_this.attr('data-card'));
-            const price = parseFloat(card.price);
-            const name = card.languages[0]?.name ?? 'Thẻ Garena';
-            const formattedPrice = price.toLocaleString('vi-VN') + ' ₫';
+            const panel = _this.closest('.panel-garena');
+            const sidebar = panel.find('.garena-checkout-sidebar');
+            const $quantity = panel.find('#card-quantity');
 
-            // Kiểm tra trạng thái đăng nhập (Laravel render sẵn)
-            const isLoggedIn = window.isCustomerLoggedIn || false;
-            const loginUrl = window.loginUrl || '/dang-nhap.html';
-            const $quantity = $('#card-quantity')
-            $quantity.val(1)
+            // Reset quantity
+            $quantity.val(1);
 
-            // Chuẩn bị nội dung HTML đè vào .card-description
-            let html = `
-                <div class="card-order">
-                    <h2 class="heading-1">Chi tiết đơn hàng</h2>
-                    <div class="order-info">
-                        <div class="label">
-                            <span class="text">Tên sản phẩm: </span>
-                            <span class="value">${name}</span>
-                        </div>
-                        <div class="label">
-                            <span class="text">Đơn giá: </span>
-                            <span class="value">${formattedPrice}</span>
-                        </div>
-                        <div class="label">
-                            <span class="text">Số lượng:</span>
-                            <span class="value" id="text-quantity">${$quantity.val()}</span>
-                        </div>
-                        <div class="label">
-                            <span class="text">Tổng tiền:</span>
-                            <span class="value">${formattedPrice}</span>
-                        </div>
-                        <div class="account-input">
-                            <input type="text" id="account-input" class="input-text" placeholder="Nhập vào tài khoản muốn nạp..">
-                        </div>
-            `;
+            // Clear other selections
+            panel.find('.garena-item').removeClass('active');
+            _this.addClass('active');
 
-            html += `
-                <a href="#"
-                    id="do-card"
-                    class="buy-or-login btn-pay"
-                    data-id="${card.id}"
-                    data-price="${price}"
-                    data-quantity="1"
-                    data-name="${name}">
-                        <div class="main-text">Thanh toán ngay</div>
-                        <div class="sub-text">Thanh toán số tiền ${formattedPrice}</div>
-                </a>
-            `;
+            const product = JSON.parse(_this.attr('data-card'));
+            const quantity = parseInt($quantity.val()) || 1;
 
-            // if (!isLoggedIn) {
-            //     html += `
-            //         <button class="buy-or-login" onclick="window.location.href='${loginUrl}'">
-            //             <div class="main-text">Đăng nhập ngay</div>
-            //             <div class="sub-text">Vui lòng đăng nhập để tiếp tục</div>
-            //         </button>
-            //     `;
-            // } else {
-            //     html += `
-            //         <a href="#"
-            //             class="buy-or-login btn-pay"
-            //             data-id="${card.id}"
-            //             data-price="${price}"
-            //             data-name="${name}">
-            //                 <div class="main-text">Thanh toán ngay</div>
-            //                 <div class="sub-text">Thanh toán số tiền ${formattedPrice}</div>
-            //         </a>
-            //     `;
-            // }
+            updateStepData(sidebar, product, quantity);
+            showStep(sidebar, 1); // Show consent form (Ảnh 1)
+        });
 
-            html += `
-                        <div class="notice">
-                            Nếu bạn muốn nạp số dư nhiều hơn để sử dụng cho những lần mua hàng tiếp theo,
-                            vui lòng liên hệ Hotline.
-                        </div>
-                    </div>
-                </div>
-            `;
+        // 2. Step 1 → Step 2: "TIẾP TỤC" button (after consent agree)
+        $(document).on('click', '.btn-next-step-1', function () {
+            const sidebar = $(this).closest('.garena-checkout-sidebar');
+            const consentAgree = sidebar.find('#consent-agree');
+            const errorMsg = sidebar.find('.error-msg-consent');
 
-            // Đè nội dung mới vào .card-description
-            $('.garena-item').removeClass('active')
-            _this.addClass('active')
-            $('.card-description').html(html);
+            if (consentAgree.is(':checked')) {
+                errorMsg.addClass('uk-hidden');
+                showStep(sidebar, 2); // Show order details (Ảnh 2)
+            } else {
+                errorMsg.removeClass('uk-hidden');
+            }
+        });
+
+        // 3. Step 2 → Step 3: "THANH TOÁN NGAY" button
+        $(document).on('click', '.btn-pay-now', function (e) {
+            e.preventDefault();
+            const sidebar = $(this).closest('.garena-checkout-sidebar');
+            const targetAccount = sidebar.find('#target-account');
+
+            if (!targetAccount.val() || targetAccount.val().trim() === '') {
+                alert('Vui lòng nhập tài khoản cần nạp!');
+                targetAccount.focus();
+                return;
+            }
+
+            // Get stored product data
+            const product = sidebar.data('currentProduct');
+            const quantity = sidebar.data('currentQuantity') || 1;
+            const price = parseFloat(product.price);
+            const account = targetAccount.val().trim().toLowerCase();
+
+            const _this = $(this);
+            const oldHtml = _this.html();
+
+            // Call API to create transaction
+            $.ajax({
+                url: 'ajax/transaction/create',
+                type: 'POST',
+                data: {
+                    id: product.id,
+                    _token: _token,
+                    account: account,
+                    amount: price,
+                    customerId: window.customerId,
+                    quantity: quantity
+                },
+                dataType: 'json',
+                beforeSend: function () {
+                    _this.prop('disabled', true).html(
+                        '<span class="main">Đang tạo giao dịch...</span>' +
+                        '<span class="sub">Vui lòng chờ trong giây lát</span>'
+                    );
+                },
+                success: function (res) {
+                    if (!res.success) {
+                        toastr.error(res.data?.message || 'Không thể khởi tạo giao dịch', 'Lỗi');
+                        _this.prop('disabled', false).html(oldHtml);
+                        return;
+                    }
+
+                    const data = res.data;
+
+                    // Save to localStorage
+                    let transactions = [];
+                    try {
+                        transactions = JSON.parse(localStorage.getItem('pending_transactions') || '[]');
+                    } catch { transactions = []; }
+
+                    const exists = transactions.some(tx => tx.transaction_code === data.transaction_code);
+                    if (!exists) {
+                        transactions.push({
+                            id: data.id,
+                            transaction_code: data.transaction_code,
+                            created_at: Date.now(),
+                            status: data.status || 'pending'
+                        });
+                        localStorage.setItem('pending_transactions', JSON.stringify(transactions));
+                    }
+
+                    // Update Step 3 QR image in sidebar and modal
+                    const $qrImg = sidebar.find('.step-3 .qr-image img');
+                    const $modalQrImg = $('#order-payment-modal .qr-image img');
+                    if (data.qr_image) {
+                        $qrImg.attr('src', data.qr_image);
+                        $modalQrImg.attr('src', data.qr_image);
+                    }
+
+                    // Update Step 3 transfer content if transaction code exists
+                    if (data.transaction_code) {
+                        sidebar.find('.step-3 .transfer-content-val').text(data.transaction_code);
+                        $('#order-payment-modal .transfer-content-val').text(data.transaction_code);
+                    }
+                    if (data.amount) {
+                        sidebar.find('.step-3 .transfer-amount-val').text(formatNumber(data.amount));
+                        $('#order-payment-modal .transfer-amount-val').text(formatNumber(data.amount));
+                    }
+
+                    // Show Step 3 (Payment info - Ảnh 3)
+                    showStep(sidebar, 3);
+                },
+                error: function () {
+                    toastr.error('Có lỗi xảy ra, vui lòng thử lại!', 'Lỗi');
+                    _this.prop('disabled', false).html(oldHtml);
+                }
+            });
+        });
+
+        // 4. "HỦY BỎ" button → back to Step 0
+        $(document).on('click', '.btn-cancel', function () {
+            const panel = $(this).closest('.panel-garena');
+            const sidebar = panel.find('.garena-checkout-sidebar');
+            showStep(sidebar, 0);
+            panel.find('.garena-item').removeClass('active');
+            // Reset consent checkbox
+            sidebar.find('#consent-agree').prop('checked', false);
+            sidebar.find('.error-msg-consent').addClass('uk-hidden');
+        });
+
+        // 5. Copy button
+        $(document).on('click', '.btn-copy', function () {
+            const text = $(this).parent().clone().children('.btn-copy').remove().end().text().trim();
+            navigator.clipboard.writeText(text).then(() => {
+                toastr.success('Đã sao chép: ' + text);
+            });
+        });
+
+        // 6. Sync quantity changes
+        $(document).on('change', '#card-quantity', function () {
+            const panel = $(this).closest('.panel-garena');
+            const activeItem = panel.find('.garena-item.active');
+            if (activeItem.length) {
+                const sidebar = panel.find('.garena-checkout-sidebar');
+                const product = JSON.parse(activeItem.attr('data-card'));
+                const quantity = parseInt($(this).val()) || 1;
+                updateStepData(sidebar, product, quantity);
+            }
         });
     };
 

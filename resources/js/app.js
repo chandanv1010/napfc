@@ -17,6 +17,7 @@ import io from 'socket.io-client';
 // import '../vendor/frontend/core/plugins/jquery-nice-select-1.1.0/js/jquery.nice-select.min.js';
 import '../vendor/frontend/resources/function.js';
 import '../vendor/frontend/core/library/product.js';
+import './filter.js';
 // import 'https://unpkg.com/swiper/swiper-bundle.min.js';
 
 

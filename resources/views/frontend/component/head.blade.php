@@ -31,3 +31,16 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
 <script src="{{ asset('vendor/frontend/library/js/jquery.js') }}"></script>
+
+<style>
+    :root {
+        --bg-website: url('{{ !empty($system['homepage_background']) ? asset($system['homepage_background']) : asset('vendor/frontend/resources/img/project/bg-website.png') }}');
+    }
+    body {
+        background-image: var(--bg-website) !important;
+        background-repeat: no-repeat !important;
+        background-size: cover !important;
+        background-attachment: fixed !important;
+        background-position: center !important;
+    }
+</style>
