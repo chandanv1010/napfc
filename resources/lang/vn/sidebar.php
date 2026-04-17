@@ -81,62 +81,62 @@ return [
                 ],
             ]
         ],
-        [
-            'title' => 'QL Marketing',
-            'icon' => 'fa fa-money',
-            'name' => ['promotion', 'source'],
-            'subModule' => [
-                [
-                    'title' => 'QL Khuyến mại',
-                    'route' => 'promotion/index'
-                ],
-                [
-                    'title' => 'QL Voucher',
-                    'route' => 'voucher/index'
-                ],
-                [
-                    'title' => 'QL nguồn khách',
-                    'route' => 'source/index'
-                ],
-            ]
-        ],
-        [
-            'title' => 'QL Bài viết',
-            'icon' => 'fa fa-file',
-            'name' => ['post'],
-            'subModule' => [
-                [
-                    'title' => 'QL Nhóm Bài Viết',
-                    'route' => 'post/catalogue/index'
-                ],
-                [
-                    'title' => 'QL Bài Viết',
-                    'route' => 'post/index'
-                ]
-            ]
-        ],
-        [
-            'title' => 'QL Bình Luận',
-            'icon' => 'fa fa-comment',
-            'name' => ['reviews'],
-            'subModule' => [
-                [
-                    'title' => 'QL Bình Luận',
-                    'route' => 'review/index'
-                ]
-            ]
-        ],
-        [
-            'title' => 'QL Liên Hệ',
-            'icon' => 'fa fa-github',
-            'name' => ['contacts'],
-            'subModule' => [
-                [
-                    'title' => 'QL Liên Hệ',
-                    'route' => 'contact/index'
-                ]
-            ]
-        ],
+        // [
+        //     'title' => 'QL Marketing',
+        //     'icon' => 'fa fa-money',
+        //     'name' => ['promotion', 'source'],
+        //     'subModule' => [
+        //         [
+        //             'title' => 'QL Khuyến mại',
+        //             'route' => 'promotion/index'
+        //         ],
+        //         [
+        //             'title' => 'QL Voucher',
+        //             'route' => 'voucher/index'
+        //         ],
+        //         [
+        //             'title' => 'QL nguồn khách',
+        //             'route' => 'source/index'
+        //         ],
+        //     ]
+        // ],
+        // [
+        //     'title' => 'QL Bài viết',
+        //     'icon' => 'fa fa-file',
+        //     'name' => ['post'],
+        //     'subModule' => [
+        //         [
+        //             'title' => 'QL Nhóm Bài Viết',
+        //             'route' => 'post/catalogue/index'
+        //         ],
+        //         [
+        //             'title' => 'QL Bài Viết',
+        //             'route' => 'post/index'
+        //         ]
+        //     ]
+        // ],
+        // [
+        //     'title' => 'QL Bình Luận',
+        //     'icon' => 'fa fa-comment',
+        //     'name' => ['reviews'],
+        //     'subModule' => [
+        //         [
+        //             'title' => 'QL Bình Luận',
+        //             'route' => 'review/index'
+        //         ]
+        //     ]
+        // ],
+        // [
+        //     'title' => 'QL Liên Hệ',
+        //     'icon' => 'fa fa-github',
+        //     'name' => ['contacts'],
+        //     'subModule' => [
+        //         [
+        //             'title' => 'QL Liên Hệ',
+        //             'route' => 'contact/index'
+        //         ]
+        //     ]
+        // ],
         [
             'title' => 'QL Nhóm Thành Viên',
             'icon' => 'fa fa-user',
@@ -183,18 +183,18 @@ return [
             'icon' => 'fa fa-file',
             'name' => ['language', 'generate', 'system', 'widget'],
             'subModule' => [
-                [
-                    'title' => 'QL Ngôn ngữ',
-                    'route' => 'language/index'
-                ],
+                // [
+                //     'title' => 'QL Ngôn ngữ',
+                //     'route' => 'language/index'
+                // ],
                 [
                     'title' => 'Cấu hình hệ thống',
                     'route' => 'system/index'
                 ],
-                [
-                    'title' => 'Quản lý Widget',
-                    'route' => 'widget/index'
-                ],
+                // [
+                //     'title' => 'Quản lý Widget',
+                //     'route' => 'widget/index'
+                // ],
 
             ]
         ]

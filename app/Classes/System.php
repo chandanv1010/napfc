@@ -14,6 +14,8 @@ class System{
                 'logo' => ['type' => 'images', 'label' => 'Logo Website', 'title' => 'Click vào ô phía dưới để tải logo'],
                 'favicon' => ['type' => 'images', 'label' => 'Favicon', 'title' => 'Click vào ô phía dưới để tải logo'],
                 'background' => ['type' => 'images', 'label' => 'Background Website', 'title' => 'Click vào ô phía dưới để tải hình nền'],
+                'banner_left' => ['type' => 'images', 'label' => 'Banner trái', 'title' => 'Click vào ô phía dưới để tải banner trái'],
+                'banner_right' => ['type' => 'images', 'label' => 'Banner phải', 'title' => 'Click vào ô phía dưới để tải banner phải'],
                 'copyright' => ['type' => 'text', 'label' => 'Copyright'],
                 'website' => [
                     'type' => 'select', 

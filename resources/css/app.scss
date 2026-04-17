@@ -145,34 +145,23 @@ body {
     position: fixed;
     top: 35%;
     transform: translateY(-50%);
+    width: 140px;
+    height: 80vh;
     z-index: 99;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     pointer-events: none;
-
-    img {
-        width: 140px;
-        height: auto;
-    }
+    background-repeat: no-repeat;
+    background-size: contain;
 
     &.hero-badge-left {
         left: 0;
+        background-image: var(--banner-left);
+        background-position: left center;
     }
 
     &.hero-badge-right {
         right: 0;
-    }
-
-    .hero-badge-text {
-        color: #FFD700;
-        font-size: 13px;
-        font-weight: 800;
-        text-align: center;
-        text-transform: uppercase;
-        text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
-        line-height: 1.3;
-        margin-top: -10px;
+        background-image: var(--banner-right);
+        background-position: right center;
     }
 
     @media (max-width: 1200px) {

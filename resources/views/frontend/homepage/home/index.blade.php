@@ -2,17 +2,13 @@
 @section('content')
     <div id="homepage" class="page-wrapper">
         <div class="hero-section">
-            <div class="hero-badge hero-badge-left">
-                <img src="{{ asset('vendor/frontend/resources/img/project/hoamai.png') }}" alt="Hoa Mai">
-            </div>
+            <div class="hero-badge hero-badge-left"></div>
 
             <div class="uk-container uk-container-center mt10">
                 @include('frontend.component.slide')
             </div>
 
-            <div class="hero-badge hero-badge-right">
-                <img src="{{ asset('vendor/frontend/resources/img/project/hoadao.png') }}" alt="Hoa Đào">
-            </div>
+            <div class="hero-badge hero-badge-right"></div>
         </div>
 
         @if($accountCategories->count() > 0)

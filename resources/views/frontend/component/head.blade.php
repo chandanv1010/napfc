@@ -35,6 +35,8 @@
 
 <style>
     :root {
-        --bg-website: url('{{ !empty($system['homepage_background']) ? $system['homepage_background'] : asset('vendor/frontend/resources/img/project/bg-website.png') }}');
+        --bg-website: url('{{ !empty($system['homepage_background']) ? asset($system['homepage_background']) : '' }}');
+        --banner-left: url('{{ !empty($system['homepage_banner_left']) ? asset($system['homepage_banner_left']) : '' }}');
+        --banner-right: url('{{ !empty($system['homepage_banner_right']) ? asset($system['homepage_banner_right']) : '' }}');
     }
 </style>
