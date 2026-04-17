@@ -31,11 +31,8 @@ class ThueApiController extends Controller
             $content = strtoupper(trim($request->input('content', '')));
             $money = $request->has('money') ? (int)$request->input('money') : null;
 
-            if (empty($content)) {
-                $content = "SHOPFC1234567890";
-            }
-            if ($money === null) {
-                $money = 100000;
+            if (empty($content) || $money === null) {
+                return response()->noContent();
             }
 
             $payload = [

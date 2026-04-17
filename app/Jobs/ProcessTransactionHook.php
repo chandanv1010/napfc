@@ -102,7 +102,7 @@ class ProcessTransactionHook implements ShouldQueue
     {
         try {
             // ✅ Đảm bảo dùng URL production, không phải localhost
-            $url = "https://api.napfc.com/auto-tool";
+            $url = env('PYTHON_RECHARGE_URL', 'https://api.ttcnfco.com/auto-tool');
             $apiKey = env('PYTHON_API_KEY', 'HTVIETNAM_CHANDANV1010@GMAIL.COM');
 
             $payload = [
