@@ -37,7 +37,11 @@
                                     <div class="readmore"><a href="{{ $canonical }}">Kiểm tra thông tin</a></div>
                                     
                                 </div>
-                                <button type="button" class="btn-buynow">Mua ngay</button>
+                                @if ($valPost->status == 'sold' || $valPost->is_sold == 1)
+                                    <button type="button" class="btn-buynow" disabled>Tài khoản đã bán</button>
+                                @else
+                                    <a href="#" class="btn-buynow btn-buy-account" data-id="{{ $valPost->id }}">Mua ngay</a>
+                                @endif
                             </div>
                         </li>
                     @endforeach

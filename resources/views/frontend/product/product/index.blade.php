@@ -135,7 +135,11 @@
                                                         {!! $description !!}
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn-buynow">MUA NGAY</button>
+                                                @if ($valPost->status == 'sold' || $valPost->is_sold == 1)
+                                                    <button type="button" class="btn-buynow" disabled>TÀI KHOẢN ĐÃ BÁN</button>
+                                                @else
+                                                    <button type="button" class="btn-buynow btn-buy-account" data-id="{{ $valPost->id }}">MUA NGAY</button>
+                                                @endif
                                             </div>
                                         </div>
                         @endforeach

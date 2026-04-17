@@ -115,7 +115,11 @@
                                                         {!! $description !!}
                                                     </div>
                                                 </div>
-                                                <button type="button" class="btn-buynow">MUA NGAY</button>
+                                                @if ($product->status == 'sold' || $product->is_sold == 1)
+                                                    <button type="button" class="btn-buynow" disabled>TÀI KHOẢN ĐÃ BÁN</button>
+                                                @else
+                                                    <a href="#" class="btn-buynow btn-buy-account" data-id="{{ $product->id }}">MUA NGAY</a>
+                                                @endif
                                             </div>
                                         </div>
                                         @endforeach
