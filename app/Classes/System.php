@@ -16,6 +16,7 @@ class System{
                 'background' => ['type' => 'images', 'label' => 'Background Website', 'title' => 'Click vào ô phía dưới để tải hình nền'],
                 'banner_left' => ['type' => 'images', 'label' => 'Banner trái', 'title' => 'Click vào ô phía dưới để tải banner trái'],
                 'banner_right' => ['type' => 'images', 'label' => 'Banner phải', 'title' => 'Click vào ô phía dưới để tải banner phải'],
+                'homepage_badge' => ['type' => 'images', 'label' => 'Badge tài khoản', 'title' => 'Click vào ô phía dưới để tải badge tài khoản'],
                 'copyright' => ['type' => 'text', 'label' => 'Copyright'],
                 'website' => [
                     'type' => 'select', 

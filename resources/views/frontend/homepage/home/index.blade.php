@@ -102,7 +102,7 @@
                                                                     <h3 class="name"><a href="{{ $canonical }}">{{ $name }}</a></h3>
                                                                     <div class="price-row">
                                                                         <div class="badge-wrapper">
-                                                                            <img src="{{ asset('vendor/frontend/resources/img/project/badge_code.png') }}"
+                                                                            <img src="{{ $system['homepage_homepage_badge'] ?? asset('vendor/frontend/resources/img/project/badge_code.png') }}"
                                                                                 alt="coin" class="coin-icon">
                                                                             <span
                                                                                 class="badge-code">#{{ substr($product->code, 0, 4) }}</span>
