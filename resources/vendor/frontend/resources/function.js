@@ -298,7 +298,7 @@
             const totalPrice = price * quantity;
             const name = product.languages[0]?.name ?? 'Thẻ Garena';
 
-            $sidebar.find('.total-price-val').each(function() {
+            $sidebar.find('.total-price-val').each(function () {
                 const suffix = $(this).hasClass('text-yellow') ? '' : ' ₫';
                 $(this).text(formatNumber(totalPrice) + suffix);
             });
@@ -505,14 +505,14 @@
                                             <div class="bank-row">
                                                 <div class="bank-label">Số tài khoản</div>
                                                 <div class="bank-value-line">
-                                                    <span class="bank-value bold">24982281</span>
+                                                    <span class="bank-value bold">336883868386</span>
                                                     <i class="fa fa-copy btn-copy"></i>
                                                 </div>
                                             </div>
                                             <div class="bank-row">
                                                 <div class="bank-label">Chủ tài khoản</div>
                                                 <div class="bank-value-line">
-                                                    <span class="bank-value bold uppercase">NGUYEN VAN DO</span>
+                                                    <span class="bank-value bold uppercase">BUI PHUONG DAI</span>
                                                     <i class="fa fa-copy btn-copy"></i>
                                                 </div>
                                             </div>

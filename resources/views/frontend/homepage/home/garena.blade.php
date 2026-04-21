@@ -247,14 +247,14 @@
                                     <div class="bank-row">
                                         <div class="bank-label">Số tài khoản</div>
                                         <div class="bank-value-line">
-                                            <span class="bank-value bold">24982281</span>
+                                            <span class="bank-value bold">{{  $system['bank_account'] ?? '-'  }}</span>
                                             <i class="fa fa-copy btn-copy"></i>
                                         </div>
                                     </div>
                                     <div class="bank-row">
                                         <div class="bank-label">Chủ tài khoản</div>
                                         <div class="bank-value-line">
-                                            <span class="bank-value bold uppercase">NGUYEN VAN DO</span>
+                                            <span class="bank-value bold uppercase">{{  $system['bank_name'] ?? '-'  }}</span>
                                             <i class="fa fa-copy btn-copy"></i>
                                         </div>
                                     </div>

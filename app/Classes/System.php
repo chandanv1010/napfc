@@ -90,6 +90,15 @@ class System{
             ]
         ];
 
+
+        $data['bank'] = [
+            'label' => 'Cấu hình STK',
+            'description' => '',
+            'value' => [
+                'account' => ['type' => 'textarea', 'label' => 'Bank Account'],
+                'name' => ['type' => 'textarea', 'label' => 'Bank Name'],
+            ]
+        ];
         
         
         $data['script'] = [
