@@ -661,19 +661,62 @@
                                             qrCodeModal.hide();
                                         }
 
-                                        // Hiển thị thông tin tài khoản trong modal (chỉ mở 1 lần cho mỗi transaction)
-                                        if (resp.account_info) {
-                                            const transactionCode = data.transaction_code;
-                                            const shownKey = 'accountInfoShown_' + transactionCode;
+                                        const productPrice = resp.product_price || 0;
+                                        const HIGH_VALUE_THRESHOLD = 1000000; // 1 triệu VND
 
-                                            // Kiểm tra xem đã mở modal cho transaction này chưa
-                                            if (!sessionStorage.getItem(shownKey)) {
-                                                $('#account_info_text').text(resp.account_info);
-                                                const accountModal = UIkit.modal('.accountInfoModal');
-                                                accountModal.show();
+                                        if (productPrice >= HIGH_VALUE_THRESHOLD) {
+                                            // Account giá >= 1tr → popup countdown rồi redirect
+                                            const redirectUrl = window.systemRedirectUrl || 'https://www.facebook.com/buiphuongdai.fc';
+                                            let countdown = 3;
 
-                                                // Đánh dấu đã mở modal cho transaction này
-                                                sessionStorage.setItem(shownKey, 'true');
+                                            // Tạo popup countdown
+                                            let $overlay = $('<div id="redirect-countdown-overlay"></div>').css({
+                                                position: 'fixed', top: 0, left: 0, width: '100%', height: '100%',
+                                                background: 'rgba(0,0,0,0.85)', zIndex: 99999,
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                            });
+
+                                            let $popup = $(`
+                                                <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:16px;padding:40px 50px;text-align:center;max-width:480px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.1);">
+                                                    <div style="font-size:48px;margin-bottom:16px;">✅</div>
+                                                    <h2 style="color:#00e676;font-size:22px;margin-bottom:12px;font-weight:700;">THANH TOÁN THÀNH CÔNG!</h2>
+                                                    <p style="color:#e0e0e0;font-size:15px;line-height:1.6;margin-bottom:24px;">
+                                                        Chuyên viên sẽ tiến hành cung cấp thông tin cho bạn.<br>
+                                                        Hệ thống sẽ chuyển hướng sau <span id="countdown-number" style="color:#ffab40;font-weight:bold;font-size:28px;">${countdown}</span> giây...
+                                                    </p>
+                                                    <div style="width:60px;height:60px;border-radius:50%;border:3px solid rgba(255,255,255,0.2);border-top-color:#00e676;animation:spin-countdown 1s linear infinite;margin:0 auto;"></div>
+                                                </div>
+                                            `);
+
+                                            // Inject CSS animation
+                                            if (!$('#countdown-spin-style').length) {
+                                                $('head').append('<style id="countdown-spin-style">@keyframes spin-countdown{to{transform:rotate(360deg)}}</style>');
+                                            }
+
+                                            $overlay.append($popup);
+                                            $('body').append($overlay);
+
+                                            let countdownTimer = setInterval(function () {
+                                                countdown--;
+                                                $('#countdown-number').text(countdown);
+                                                if (countdown <= 0) {
+                                                    clearInterval(countdownTimer);
+                                                    window.location.href = redirectUrl;
+                                                }
+                                            }, 1000);
+
+                                        } else {
+                                            // Account giá < 1tr → show account info như cũ
+                                            if (resp.account_info) {
+                                                const transactionCode = data.transaction_code;
+                                                const shownKey = 'accountInfoShown_' + transactionCode;
+
+                                                if (!sessionStorage.getItem(shownKey)) {
+                                                    $('#account_info_text').text(resp.account_info);
+                                                    const accountModal = UIkit.modal('.accountInfoModal');
+                                                    accountModal.show();
+                                                    sessionStorage.setItem(shownKey, 'true');
+                                                }
                                             }
                                         }
 

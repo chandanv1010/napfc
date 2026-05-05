@@ -613,6 +613,7 @@ class ProductController extends Controller
                 'transaction_code' => $transaction->transaction_code,
                 'product_name' => $productName,
                 'account_info' => $accountInfo,
+                'product_price' => (int) ($product->price ?? 0),
                 'paid_at' => $transaction->paid_at
                     ? \Carbon\Carbon::parse($transaction->paid_at)->format('d/m/Y H:i:s')
                     : null,

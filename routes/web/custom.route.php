@@ -23,12 +23,10 @@ Route::post('ajax/account/buy', [ProductController::class, 'createAccountTransac
 Route::get('account/info/success/{code}', [FrontendController::class, 'success'])
     ->name('account.success');
 Route::get('ajax/account/status/{code}', [ProductController::class, 'accountTransactionStatus'])
-->name('account.status');
+    ->name('account.status');
 
 
 
 Route::middleware(['customer'])->group(function () {
     Route::get('profile', [CustomerController::class, 'profile'])->name('customer.profile');
-    
 });
-

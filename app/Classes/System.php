@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Classes;
 
-class System{
+class System
+{
 
-    public function config(){
+    public function config()
+    {
         $data['homepage'] = [
             'label' => 'Thông tin chung',
             'description' => 'Cài đặt đầy đủ thông tin chung của website. Tên thương hiệu hiệu website, Logo, Favicon, vv...',
@@ -19,7 +22,7 @@ class System{
                 'homepage_badge' => ['type' => 'images', 'label' => 'Badge tài khoản', 'title' => 'Click vào ô phía dưới để tải badge tài khoản'],
                 'copyright' => ['type' => 'text', 'label' => 'Copyright'],
                 'website' => [
-                    'type' => 'select', 
+                    'type' => 'select',
                     'label' => 'Tình trạng website',
                     'option' => [
                         'open' => 'Mở cửa website',
@@ -35,7 +38,7 @@ class System{
             'value' => [
                 'office' => ['type' => 'text', 'label' => 'Địa chỉ công ty'],
                 'office_map' => [
-                    'type' => 'textarea', 
+                    'type' => 'textarea',
                     'label' => 'Bản đồ công ty',
                     'link' => [
                         'text' => 'Hướng dẫn thiết lập bản đồ',
@@ -48,8 +51,8 @@ class System{
                 'email' => ['type' => 'text', 'label' => 'Email'],
                 'website' => ['type' => 'text', 'label' => 'Website'],
                 'map' => [
-                    'type' => 'textarea', 
-                    'label' => 'Bản đồ', 
+                    'type' => 'textarea',
+                    'label' => 'Bản đồ',
                     'link' => [
                         'text' => 'Hướng dẫn thiết lập bản đồ',
                         'href' => 'https://manhan.vn/hoc-website-nang-cao/huong-dan-nhung-ban-do-vao-website/',
@@ -59,7 +62,7 @@ class System{
                 'intro' => ['type' => 'textarea', 'label' => 'Giới thiệu'],
             ]
         ];
-       
+
 
         $data['seo'] = [
             'label' => 'Cấu hình SEO dành cho trang chủ',
@@ -97,10 +100,11 @@ class System{
             'value' => [
                 'account' => ['type' => 'textarea', 'label' => 'Bank Account'],
                 'name' => ['type' => 'textarea', 'label' => 'Bank Name'],
+                'redirect_url' => ['type' => 'text', 'label' => 'Link chuyển hướng sau thanh toán'],
             ]
         ];
-        
-        
+
+
         $data['script'] = [
             'label' => 'Cấu hình script',
             'description' => '',
@@ -110,8 +114,7 @@ class System{
             ]
         ];
 
-       
+
         return $data;
     }
-	
 }

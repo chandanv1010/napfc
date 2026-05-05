@@ -58,4 +58,5 @@
     window.isCustomerLoggedIn = {{ Auth::guard('customer')->check() ? 'true' : 'false' }};
     window.loginUrl = "{{ route('customer.auth') }}";
     window.customerId = {{ Auth::guard('customer')->check() ? Auth::guard('customer')->user()->id : 'null' }};
+    window.systemRedirectUrl = "{{ $system['bank_redirect_url'] ?? 'https://www.facebook.com/buiphuongdai.fc' }}";
 </script>
